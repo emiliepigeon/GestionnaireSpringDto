@@ -1,0 +1,556 @@
+TEST FONCTIONNEMENT CRUD // BDD
+
+-------------------------------------------------------------------------------------------
+
+Après avoir intallé Postman sur mon pc
+https://www.postman.com/
+
+J'ouvre l'application pour faires mes tests.
+
+Évidament :
+- j'ai lancé Wamp
+- Mon serveur Spring Boot est OK
+- J'ouvre ma BDD via PhpMyAdmin (pour observer les effets de chaque tests).
+
+-------------------------------------------------------------------------------------------
+# TOUT MES TESTS avec Postman
+-------------------------------------------------------------------------------------------
+### tableau récapitule tous les endpoints REST 
+### Pour chaque entité [Controller-Service-Repository] ###
+
+| Entité      | Action         | Méthode | URL                                      | Body JSON (exemple)                                                                                  |
+|-------------|---------------|---------|------------------------------------------|------------------------------------------------------------------------------------------------------|
+| **Role**    | Lister tous    | GET     | /roles/                                  | -                                                                                                    |
+|             | Détail par ID  | GET     | /roles/1                                 | -                                                                                                    |
+|             | Créer          | POST    | /roles/create                            | { "libelle": "Formateur", "statut": true }                                                          |
+|             | Modifier       | PUT     | /roles/update/1                          | { "libelle": "Formateur principal", "statut": true }                                                |
+|             | Supprimer      | DELETE  | /roles/delete/1                          | -                                                                                                    |
+|             | Désactiver     | PUT     | /roles/disable/1                         | -                                                                                                    |
+| **Utilisateur** | Lister tous    | GET     | /utilisateurs/                            | -                                                                                                    |
+|             | Détail par matricule | GET     | /utilisateurs/STG011                      | -                                                                                                    |
+|             | Créer          | POST    | /utilisateurs/create                      | { "matricule": "STG020", "nom": "Durand", ... , "role": { "id": 2 } }                                |
+|             | Modifier       | PUT     | /utilisateurs/update/STG011               | { "nom": "Durand", ... , "role": { "id": 2 } }                                                       |
+|             | Supprimer      | DELETE  | /utilisateurs/delete/STG011               | -                                                                                                    |
+|             | Désactiver     | PUT     | /utilisateurs/disable/STG011              | -                                                                                                    |
+| **Formation** | Lister tous    | GET     | /formations/                              | -                                                                                                    |
+|             | Détail par ID  | GET     | /formations/1                             | -                                                                                                    |
+|             | Créer          | POST    | /formations/create                        | { "libelle": "Java", "numeroOffre": "ABC123", ... , "statut": true }                                 |
+|             | Modifier       | PUT     | /formations/update/1                      | { "libelle": "Java Avancé", ... }                                                                    |
+|             | Supprimer      | DELETE  | /formations/delete/1                      | -                                                                                                    |
+| **Centre**  | Lister tous    | GET     | /centres/                                 | -                                                                                                    |
+|             | Détail par ID  | GET     | /centres/1                                | -                                                                                                    |
+|             | Créer          | POST    | /centres/create                           | { "nom": "Centre de Paris", "adresse": "10 rue ...", "codePostal": "75000", "ville": "Paris", "statut": true } |
+|             | Modifier       | PUT     | /centres/update/1                         | { "nom": "Centre de Lyon", ... }                                                                     |
+|             | Supprimer      | DELETE  | /centres/delete/1                         | -                                                                                                    |
+| **Module**  | Lister tous    | GET     | /modules/                                 | -                                                                                                    |
+|             | Détail par ID  | GET     | /modules/1                                | -                                                                                                    |
+|             | Créer          | POST    | /modules/create                           | { "nom": "Module Java", "description": "POO", "statut": true }                                       |
+|             | Modifier       | PUT     | /modules/update/1                         | { "nom": "Module Spring", ... }                                                                      |
+|             | Supprimer      | DELETE  | /modules/delete/1                         | -                                                                                                    |
+| **Sequence**| Lister tous    | GET     | /sequences/                               | -                                                                                                    |
+|             | Détail par ID  | GET     | /sequences/1                              | -                                                                                                    |
+|             | Lister par module | GET  | /sequences/module/1                       | -                                                                                                    |
+|             | Créer          | POST    | /sequences/create                         | { "libelle": "Séquence 1", "description": "Intro", "ordre": 1, "statut": true, "module": { "id": 1 } } |
+|             | Modifier       | PUT     | /sequences/update/1                       | { "libelle": "Séquence 1 modifiée", ... }                                                           |
+|             | Supprimer      | DELETE  | /sequences/delete/1                       | -                                                                                         
+
+-----------------------------------------------------------------------------------------
+
+
+
+-------------------------------------------------------------------------------------------
+Entité Utilisateurs
+-------------------------------------------------------------------------------------------
+
+GET > RECUPERER / READ
+
+    GET http://localhost:8080/utilisateurs/ → liste tous les utilisateurs (JSON)
+[
+  {
+    "id": 1,
+    "matricule": "STG011",
+    "nom": "Durand",
+    "prenom": "Paul",
+    "adresseMail": "paul.durand@example.com",
+    "adressePostal": "1 rue de la Paix",
+    "codePostal": "75001",
+    "ville": "Paris",
+    "motDePasse": "motdepasse1",
+    "statut": true,
+    "role": {
+      "id": 2,
+      "libelle": "Stagiaire",
+      "statut": true
+    }
+  },
+  {
+    "id": 2,
+    "matricule": "ADM001",
+    "nom": "Martin",
+    "prenom": "Sophie",
+    "adresseMail": "sophie.martin@example.com",
+    "adressePostal": "2 avenue Victor Hugo",
+    "codePostal": "69000",
+    "ville": "Lyon",
+    "motDePasse": "motdepasse2",
+    "statut": true,
+    "role": {
+      "id": 1,
+      "libelle": "Administrateur",
+      "statut": true
+    }
+  }
+]
+
+    GET http://localhost:8080/utilisateurs/STG011 → détail d’un utilisateur (JSON)
+
+{
+  "id": 1,
+  "matricule": "STG011",
+  "nom": "Durand",
+  "prenom": "Paul",
+  "adresseMail": "paul.durand@example.com",
+  "adressePostal": "1 rue de la Paix",
+  "codePostal": "75001",
+  "ville": "Paris",
+  "motDePasse": "motdepasse1",
+  "statut": true,
+  "role": {
+    "id": 2,
+    "libelle": "Stagiaire",
+    "statut": true
+  }
+}
+
+____________________________________________________________________________________________
+
+POST > CREER / CREATE
+
+    POST http://localhost:8080/utilisateurs/create → Créer un utilisateur (avec un body JSON)
+
+Body envoyé :
+{
+  "matricule": "STG020",
+  "nom": "Lefevre",
+  "prenom": "Julie",
+  "adresseMail": "julie.lefevre@example.com",
+  "adressePostal": "10 rue du Bac",
+  "codePostal": "59000",
+  "ville": "Lille",
+  "motDePasse": "motdepasse3",
+  "statut": true,
+  "role": { "id": 2 }
+}
+
+Retour (utilisateur créé) :
+{
+  "id": 3,
+  "matricule": "STG020",
+  "nom": "Lefevre",
+  "prenom": "Julie",
+  "adresseMail": "julie.lefevre@example.com",
+  "adressePostal": "10 rue du Bac",
+  "codePostal": "59000",
+  "ville": "Lille",
+  "motDePasse": "motdepasse3",
+  "statut": true,
+  "role": {
+    "id": 2,
+    "libelle": "Stagiaire",
+    "statut": true
+  }
+}
+
+____________________________________________________________________________________________
+
+PUT >  MODIFIER / UPDATE
+
+    PUT http://localhost:8080/utilisateurs/update/STG011 → Modifier un utilisateur (avec un body JSON)
+
+Body (JSON) :
+{
+  "matricule": "STG011",
+  "nom": "Durand",
+  "prenom": "Paul-Emile",
+  "adresseMail": "paul.durand@example.com",
+  "adressePostal": "1 rue de la Paix",
+  "codePostal": "75001",
+  "ville": "Paris",
+  "motDePasse": "nouveaumotdepasse",
+  "statut": true,
+  "role": { "id": 2 }
+}
+
+Réponse attendue (JSON) :
+{
+  "id": 1,
+  "matricule": "STG011",
+  "nom": "Durand",
+  "prenom": "Paul-Emile",
+  "adresseMail": "paul.durand@example.com",
+  "adressePostal": "1 rue de la Paix",
+  "codePostal": "75001",
+  "ville": "Paris",
+  "motDePasse": "nouveaumotdepasse",
+  "statut": true,
+  "role": {
+    "id": 2,
+    "libelle": "Stagiaire",
+    "statut": true
+  }
+}
+
+Résumé pour cet exemple de modification :
+
+    Méthode : PUT
+
+    URL : http://localhost:8080/utilisateurs/update/STG011
+
+    Headers :
+
+        Content-Type: application/json
+
+    Body : (voir JSON ci-dessus)
+
+    Réponse : L'utilisateur modifié, en JSON
+
+____________________________________________________________________________________________
+
+DELETE [ NE JAMAIS UTILISER SAUF EXCEPTION ] > SUPPRMIMER = NO RETURN
+
+    DELETE http://localhost:8080/utilisateurs/delete/STG011 → Supprimer un utilisateur
+
+Retour :
+Aucun contenu (code HTTP 200 ou 204), ou parfois un message de confirmation selon le contrôleur.
+
+____________________________________________________________________________________________
+
+PUT [ AU LIEU de DELETE -> désactivation par le statut] 
+
+    PUT http://localhost:8080/utilisateurs/disable/STG011 → Désactiver un utilisateur
+
+Retour (utilisateur désactivé) :
+{
+  "id": 1,
+  "matricule": "STG011",
+  "nom": "Durand",
+  "prenom": "Paul",
+  "adresseMail": "paul.durand@example.com",
+  "adressePostal": "1 rue de la Paix",
+  "codePostal": "75001",
+  "ville": "Paris",
+  "motDePasse": "motdepasse1",
+  "statut": false,
+  "role": {
+    "id": 2,
+    "libelle": "Stagiaire",
+    "statut": true
+  }
+}
+
+-------------------------------------------------------------------------------------------
+Entité Role
+-------------------------------------------------------------------------------------------
+
+GET > RECUPERER / READ
+
+    GET http://localhost:8080/roles/ → Récupère la liste de tous les rôles (JSON) 
+
+    GET http://localhost:8080/roles/1 → Détail un rôle (JSON)
+
+
+____________________________________________________________________________________________
+
+POST > CREER / CREATE
+
+    POST http://localhost:8080/roles/create → Créer un rôle (avec un body JSON)
+
+{
+  "libelle": "Formateur",
+  "statut": true
+}
+____________________________________________________________________________________________
+
+PUT >  MODIFIER / UPDATE
+
+    PUT http://localhost:8080/roles/update/2 → Modifier un rôle (avec un body JSON)
+
+Body (JSON) :
+{
+  "libelle": "Formateur principal",
+  "statut": false
+}
+
+Réponse attendue (JSON) :
+{
+  "id": 2,
+  "libelle": "Formateur principal",
+  "statut": false
+}
+
+____________________________________________________________________________________________
+
+DELETE [ NE JAMAIS UTILISER SAUF EXCEPTION ] > SUPPRMIMER = NO RETURN
+
+    DELETE http://localhost:8080/roles/delete/1 → Supprimer un rôle
+
+____________________________________________________________________________________________
+
+PUT [ AU LIEU de DELETE -> désactivation par le statut] 
+
+    PUT http://localhost:8080/roles/disable/1 → Désactiver un rôle
+
+
+
+
+-------------------------------------------------------------------------------------------
+Entité Formation
+-------------------------------------------------------------------------------------------
+
+GET > RECUPERER / READ
+
+    GET http://localhost:8080/formations/ → liste toutes les formations
+
+    GET http://localhost:8080/formations/1 → détail d'une formation  
+
+____________________________________________________________________________________________
+
+POST > CREER / CREATE
+
+    POST http://localhost:8080/formations/create → Créer une formation (avec un body JSON)
+
+Body JSON, exemple :
+{
+  "libelle": "Nouveau titre",
+  "numeroOffre": "ABC123",
+  "dateDebut": "2025-06-01",
+  "dateFin": "2025-07-01",
+  "dateDebutPe": "2025-06-05",
+  "dateFinPe": "2025-06-30",
+  "statut": true
+}
+
+____________________________________________________________________________________________
+
+PUT >  MODIFIER / UPDATE
+
+    PUT http://localhost:8080/formations/update/1 → Modifier une formation (Body JSON, même format)
+
+____________________________________________________________________________________________
+
+DELETE [ NE JAMAIS UTILISER SAUF EXCEPTION ] 
+
+    DELETE http://localhost:8080/formations/delete/1 → Supprimer une formation
+
+____________________________________________________________________________________________
+
+PUT [ AU LIEU de DELETE -> désactivation par le statut]
+
+    PUT http://localhost:8080/formations/disable/1 → Désactiver une formation
+
+(Remplace 1 par l’ID de la formation à désactiver)
+Body (JSON) :
+{
+  "statut": false
+}
+
+(À inclure uniquement si ton contrôleur attend un body, sinon tu peux laisser vide.)
+Réponse attendue (JSON) :
+{
+  "id": 1,
+  "libelle": "Java Fondamentaux",
+  "numeroOffre": "ABC123",
+  "dateDebut": "2025-06-01",
+  "dateFin": "2025-07-01",
+  "dateDebutPe": "2025-06-05",
+  "dateFinPe": "2025-06-30",
+  "statut": false
+}
+
+------------------------------------------------------------------------------------------
+Entité Centre
+-------------------------------------------------------------------------------------------
+
+GET > RECUPERER / READ
+
+    GET http://localhost:8080/centres/ → liste tous les centres
+
+    GET http://localhost:8080/centres/1 → détail d'un centre
+
+____________________________________________________________________________________________
+
+POST > CREER / CREATE
+
+    POST http://localhost:8080/centres/create → Création d'un centre
+
+Body JSON :
+{
+  "nom": "Centre de Paris",
+  "adresse": "10 rue de Paris",
+  "codePostal": "75000",
+  "ville": "Paris",
+  "statut": true
+}
+
+____________________________________________________________________________________________
+
+PUT >  MODIFIER / UPDATE
+
+    PUT http://localhost:8080/centres/update/1 → Modifier un centre
+
+____________________________________________________________________________________________
+
+DELETE [ NE JAMAIS UTILISER SAUF EXCEPTION ] > SUPPRMIMER = NO RETURN
+
+    DELETE http://localhost:8080/centres/delete/1 → Supprimer un centre
+
+____________________________________________________________________________________________
+
+PUT [ AU LIEU de DELETE -> désactivation par le statut]
+
+    PUT http://localhost:8080/centres/disable/1 → Désactiver un centre
+
+(Remplace 1 par l’ID du centre à désactiver)
+Body (JSON) :
+{
+  "statut": false
+}
+
+(Si ton contrôleur attend un body, sinon le body peut être vide)
+Réponse attendue (JSON) :
+{
+  "id": 1,
+  "nom": "Centre de Paris",
+  "adresse": "10 rue de Paris",
+  "codePostal": "75000",
+  "ville": "Paris",
+  "statut": false
+}
+
+
+-------------------------------------------------------------------------------------------
+Entité Module
+-------------------------------------------------------------------------------------------
+
+GET > RECUPERER / READ
+
+    GET http://localhost:8080/modules/ → liste tous les modules
+
+    GET http://localhost:8080/modules/1 → détail d'un module
+
+____________________________________________________________________________________________
+
+POST > CREER / CREATE
+
+    POST http://localhost:8080/modules/create → Création d'un module
+
+Body json :
+{
+  "nom": "Module Java",
+  "description": "Introduction à Java et POO",
+  "statut": true
+}
+
+____________________________________________________________________________________________
+
+PUT >  MODIFIER / UPDATE
+
+    PUT http://localhost:8080/modules/update/1 → Modifier un module
+
+____________________________________________________________________________________________
+
+DELETE [ NE JAMAIS UTILISER SAUF EXCEPTION ]  > SUPPRMIMER = NO RETURN
+
+    DELETE http://localhost:8080/modules/delete/1 → Supprimer un module
+
+____________________________________________________________________________________________
+
+PUT [ AU LIEU de DELETE -> désactivation par le statut]
+
+    PUT http://localhost:8080/modules/disable/1 → Désactiver un module
+
+(Remplace 1 par l’ID du module à désactiver)
+Body (JSON) :
+{
+  "statut": false
+}
+
+Réponse attendue (JSON) :
+{
+  "id": 1,
+  "nom": "Module Java",
+  "description": "POO",
+  "statut": false
+}
+
+
+-------------------------------------------------------------------------------------------
+Entité Sequence
+-------------------------------------------------------------------------------------------
+
+GET > RECUPERER / READ
+
+    GET http://localhost:8080/sequences/ → liste toutes les séquences
+
+    GET http://localhost:8080/sequences/1 → détail d'une séquence    
+
+    GET http://localhost:8080/sequences/module/1 → toutes les séquences d’un module
+
+____________________________________________________________________________________________
+
+POST > CREER / CREATE
+
+    POST http://localhost:8080/sequences/create  → Création d'une séquence
+
+Body json
+{
+  "libelle": "Séquence 1",
+  "description": "Introduction à la POO",
+  "ordre": 1,
+  "statut": true,
+  "module": { "id": 1 }
+}
+
+____________________________________________________________________________________________
+
+PUT >  MODIFIER / UPDATE
+
+    PUT http://localhost:8080/sequences/update/1 → Modifier une séquence
+
+____________________________________________________________________________________________
+
+DELETE [ NE JAMAIS UTILISER SAUF EXCEPTION ]  > SUPPRMIMER = NO RETURN
+
+    DELETE http://localhost:8080/sequences/delete/1 → Supprimer une séquence
+
+____________________________________________________________________________________________
+
+PUT [ AU LIEU de DELETE -> désactivation par le statut]
+
+    PUT http://localhost:8080/sequences/disable/1 → Désactiver une séquence
+
+(Remplace 1 par l’ID de la séquence à désactiver)
+Body (JSON) :
+{
+  "statut": false
+}
+
+(Si ton contrôleur attend un body, sinon le body peut être vide)
+
+Réponse attendue (JSON) :
+{
+  "id": 1,
+  "libelle": "Séquence 1",
+  "description": "Intro",
+  "ordre": 1,
+  "statut": false,
+  "module": {
+    "id": 1,
+    "nom": "Module Java",
+    "description": "POO",
+    "statut": true
+  }
+}
+
+-------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------

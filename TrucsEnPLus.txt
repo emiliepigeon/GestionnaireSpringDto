@@ -70,3 +70,28 @@ http://localhost:8080/utilisateur
 http://localhost:8080/utilisateur/demo
 
 ____________________________________________________________________
+ Fausses données requête SQl
+
+ Table Module
+ INSERT INTO module (nom, description, statut) VALUES
+('Java Fondamentaux', 'Découverte de la programmation orientée objet avec Java', true),
+('Web Frontend', 'HTML, CSS, JavaScript pour le développement web', true),
+('Spring Boot', 'Développement d’API REST avec Spring Boot', true),
+('Base de données', 'Introduction à SQL et à la modélisation', true),
+('Déploiement', 'Mise en production et CI/CD', false);
+
+
+ Table Sequence
+ INSERT INTO sequence (libelle, description, ordre, statut, module_id) VALUES
+('Variables et types', 'Premiers pas avec les variables Java', 1, true, 1),
+('Boucles et conditions', 'Comprendre les structures de contrôle', 2, true, 1),
+('Classes et objets', 'POO en Java', 3, true, 1),
+('HTML de base', 'Structure d’une page web', 1, true, 2),
+('CSS fondamental', 'Mettre en forme ses pages', 2, true, 2),
+('JavaScript initiation', 'Dynamiser le web', 3, true, 2),
+('Création d’un projet Spring Boot', 'Initialisation et configuration', 1, true, 3),
+('Contrôleurs REST', 'Créer des endpoints REST', 2, true, 3),
+('JPA et persistance', 'Connexion à la base de données', 3, true, 3),
+('Modélisation SQL', 'Concevoir un schéma relationnel', 1, true, 4),
+('Requêtes de base', 'SELECT, INSERT, UPDATE, DELETE', 2, true, 4),
+('Déploiement sur serveur', 'Publier une application', 1, false, 5);

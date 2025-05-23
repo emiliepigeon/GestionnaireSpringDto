@@ -1,61 +1,162 @@
+## Gestionnaire de Formation – Projet Spring Boot
 
-# Premier API
+Ce projet est une API rest réalisée en Java avec le framework Spring Boot.
 
-15/05/2025
+Il permet de gérer des utilisateurs, des rôles, des formations, des centres, des modules et des séquences de formation.
 
-Je suis débutante voici mon premier projet d'API.
-Exercice demandé par mon formateur : mise en place d'une API de Gestionnaire de formation et de centre.
+Ce projeta été initier via Spring Boot via https://start.spring.io/
 
-Pour cela un cahier des charges nous a été remis, ainsi qu'un fichier looping de la modélisation et conceptualisation de la base de données relationnelle.
 
------------------------------------------------------------------------------------------
-JAVA / MAVEN / SPRING BOOT
-_________________________________________________________________________
-# Demande 1 du formateur
-Création via phpMyAdmin de la BDD (entités/tables relationnelles et contraintes).
+## API REST
+C’est une façon pour deux applications de communiquer entre elles à travers Internet, en utilisant des règles simples.
 
-# Demande 2 du formateur
-Mettre en place un dépôt GITHUB propre et pousser régulièrement (sur le dépôt distant).
+Avec une API REST, je peux demander, ajouter, modifier ou supprimer des informations (comme des utilisateurs ou des formations) en envoyant des requêtes avec des verbes comme GET, POST, PUT ou DELETE.
 
-Pour cela :
-- je me connecte à GitHub
-- je crée un nouveau repository
-- j'ouvre ma console GitBash (sur mon pc je me mais dans le répertoire où je veux travailler. Puis clic droit -> afficher plus d'otion -> ouvrir le GitBash).
+C’est un moyen pratique et universel pour qu’un site web, une application mobile ou un autre programme puisse échanger des données avec mon application.
 
-- Dans mon bash :
-1- git clone [url du dépôt distant]
-2- cd [non du dossier] -> je me déplace dans le bon répertoire
-3- git init -> j'initialise mon dépôt
+-----------------------------------------------------------------------------------------------
+# 🌱 Mise en place du projet
+-----------------------------------------------------------------------------------------------
 
-- Je ferme mon GitBash et j'ouvre mon projet (dossier de travail) dans mon éditeur de texte ou IDE -> en l'occurence je vais utiliser VsCode.
+1. Prérequis
 
-Nb : j'ai en amont installé mon JDK et mis en place les variables d'environnement pour pouvoir travailler avec le langage Java.
+    Java 17 ou plus (recommandé)
 
-# Demande 3 du formateur
-Cette étape à déjà été faite. 
+    Maven (gestionnaire de dépendances)
 
-Initier le projet Spring Boot via https://start.spring.io/
+    Un IDE (VSCode, IntelliJ IDEA, Eclipse…)
 
+    Une base de données MySQL ou MariaDB
+
+-----------------------------------------------------------------------------------------------
+
+2. Créer la base de données (exemple avec MySQL) : via PhpMyAdmin
+
+sql
+    CREATE DATABASE gestionnaire_formation CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+    .....
+
+    Penser à Créer un compte utilisateur pour chaque BDD.
+
+-----------------------------------------------------------------------------------------------
+
+3. Configurer la connexion à la base de données dans le fichier 
+src/main/resources/application.properties :
+
+text :
+    spring.datasource.url=jdbc:mysql://localhost:3306/gestionnaire_formation
+    spring.datasource.username=ton_user
+    spring.datasource.password=ton_mot_de_passe
+
+-----------------------------------------------------------------------------------------------
+
+4. Lancer le projet :
+
+    Avec Maven :
+
+        mvn spring-boot:run
+
+    Ou directement via ton IDE (clic droit sur GestionnaireFormationApplication.java > Run)
+
+-----------------------------------------------------------------------------------------------
+
+5. Tester l’API avec Postman ou un navigateur.
+https://www.postman.com/
+
+
+-----------------------------------------------------------------------------------------------
+# Mon pom.xml
 Si besoin de packages supplémentaires https://mvnrepository.com/
 
-Je vais donc juste récupérer mon projet précédent.
-Pour cela je fais un copier collé de mon ancien projet dans mon nouveau projet.
-Je fais cela pour que mon repository soit propre et carré (demande du formateur).
 
-# Pour continuer
-et avoir un dépôt propre.
+-----------------------------------------------------------------------------------------------
+## 📦 Structure du projet
+-----------------------------------------------------------------------------------------------
 
-J'ouvre un terminal GitBash dans Vs Code
+src/main/java/com/emi/GestionnaireFormation/
+├── model/        # Les entités (tables de la base)
+├── repository/   # Les interfaces pour accéder à la base
+├── service/      # La logique métier
+├── controller/   # Les endpoints REST (API)
+└── GestionnaireFormationApplication.java # Classe principale
 
-Je m'assure d'être dans le bon répertoire.
+-----------------------------------------------------------------------------------------------
+## 🌍 Les verbes HTTP utilisés
+-----------------------------------------------------------------------------------------------
 
+    GET : pour lire/lister des données (ex : voir tous les utilisateurs)
 
-#### AVANT de continuer je vais synchroniser mes dépôt
+    POST : pour créer une nouvelle donnée (ex : ajouter une formation)
 
-ATTENTION Ce que je vais poussé ne fonctionne pas.
-C'est la base pour recommencer le travail dont je n'avais pas compris les consignes depuis 3 semaines.
+    PUT : pour modifier une donnée existante (ex : mettre à jour un module)
 
-git status
-git add .
-git commit -m "message"
-git push
+    DELETE : pour supprimer une donnée (rare, car on utilise souvent PUT pour désactiver)
+
+-----------------------------------------------------------------------------------------------
+## 🛣️ Exemples d’URL (endpoints)
+    Endpoint :
+    Un endpoint est une « adresse » (URL) d’une API à laquelle je peux envoyer une requête HTTP (GET, POST, PUT, etc.) pour accéder à une ressource ou effectuer une action (ex : obtenir la liste des utilisateurs, créer un rôle, désactiver un module…).
+
+    C’est le point d’entrée de l'application pour communiquer avec elle depuis un client (navigateur, Postman, autre application…).
+-----------------------------------------------------------------------------------------------
+
+| Entité        | Action                | Méthode | URL                                 | Body JSON (exemple)                      |
+|---------------|-----------------------|---------|-------------------------------------|------------------------------------------|
+| Role          | Lister tous           | GET     | /roles/                             | -                                        |
+|               | Détail par ID         | GET     | /roles/1                            | -                                        |
+|               | Créer                 | POST    | /roles/create                       | { "libelle": "Formateur", "statut": true } |
+|               | Modifier              | PUT     | /roles/update/1                     | { "libelle": "Formateur principal", "statut": false } |
+|               | Désactiver            | PUT     | /roles/disable/1                    | -                                        |
+| Utilisateur   | Lister tous           | GET     | /utilisateurs/                      | -                                        |
+|               | Détail par matricule  | GET     | /utilisateurs/STG011                | -                                        |
+|               | Créer                 | POST    | /utilisateurs/create                | { "matricule": "STG020", ... }           |
+|               | Modifier              | PUT     | /utilisateurs/update/STG011         | { "nom": "Durand", ... }                 |
+|               | Désactiver            | PUT     | /utilisateurs/disable/STG011        | -                                        |
+| Formation     | Lister tous           | GET     | /formations/                        | -                                        |
+|               | Détail par ID         | GET     | /formations/1                       | -                                        |
+|               | Créer                 | POST    | /formations/create                  | { "libelle": "Java", ... }               |
+|               | Modifier              | PUT     | /formations/update/1                | { "libelle": "Java Avancé", ... }        |
+|               | Désactiver            | PUT     | /formations/disable/1               | -                                        |
+| Centre        | Lister tous           | GET     | /centres/                           | -                                        |
+|               | Détail par ID         | GET     | /centres/1                          | -                                        |
+|               | Créer                 | POST    | /centres/create                     | { "nom": "Centre de Paris", ... }        |
+|               | Modifier              | PUT     | /centres/update/1                   | { "nom": "Centre de Lyon", ... }         |
+|               | Désactiver            | PUT     | /centres/disable/1                  | -                                        |
+| Module        | Lister tous           | GET     | /modules/                           | -                                        |
+|               | Détail par ID         | GET     | /modules/1                          | -                                        |
+|               | Créer                 | POST    | /modules/create                     | { "nom": "Module Java", ... }            |
+|               | Modifier              | PUT     | /modules/update/1                   | { "nom": "Module Spring", ... }          |
+|               | Désactiver            | PUT     | /modules/disable/1                  | -                                        |
+| Sequence      | Lister tous           | GET     | /sequences/                         | -                                        |
+|               | Détail par ID         | GET     | /sequences/1                        | -                                        |
+|               | Lister par module     | GET     | /sequences/module/1                 | -                                        |
+|               | Créer                 | POST    | /sequences/create                   | { "libelle": "Séquence 1", ... }         |
+|               | Modifier              | PUT     | /sequences/update/1                 | { "libelle": "Séquence 1 modifiée", ... }|
+|               | Désactiver            | PUT     | /sequences/disable/1                | -                                        |
+
+-----------------------------------------------------------------------------------------------
+## 💡 Notions utiles
+-----------------------------------------------------------------------------------------------
+
+    Entité (model) : classe Java qui représente une table SQL (ex : Utilisateur, Role…)
+
+    Repository : interface pour accéder à la base de données (CRUD)
+
+    Service : où on place la logique métier (calculs, vérifications…)
+
+    Contrôleur : où on définit les routes HTTP (endpoints)
+
+-----------------------------------------------------------------------------------------------
+## 📚 Conseils pour progresser
+-----------------------------------------------------------------------------------------------
+
+    Je teste chaque endpoint avec Postman pour bien comprendre les échanges.
+
+    Je lis les messages d’erreur dans la console : ils aident à corriger tes erreurs.
+
+    Pour chaque nouvelle entité, je crée les 4 fichiers : modèle, repository, service, contrôleur.
+
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
