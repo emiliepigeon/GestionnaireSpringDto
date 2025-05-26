@@ -13,7 +13,12 @@ import com.emi.GestionnaireFormation.model.Utilisateur;
 import com.emi.GestionnaireFormation.repository.RoleRepository;
 import com.emi.GestionnaireFormation.repository.UtilisateurRepository;
 
-// Contrôleur qui gère les routes pour les rôles
+/**
+ * Contrôleur REST qui gère les routes pour les rôles.
+ * Permet de récupérer la liste des rôles et le rôle d'un utilisateur.
+ *
+ * @author CDA Afpa Emi
+ */
 @RestController
 @RequestMapping("/roles")
 public class RoleController {
@@ -21,12 +26,23 @@ public class RoleController {
     private final RoleRepository roleRepository;
     private final UtilisateurRepository utilisateurRepository;
 
+    /**
+     * Constructeur pour l'injection des repositories.
+     *
+     * @param roleRepository repository pour l'entité Role
+     * @param utilisateurRepository repository pour l'entité Utilisateur
+     */
     public RoleController(RoleRepository roleRepository, UtilisateurRepository utilisateurRepository) {
         this.roleRepository = roleRepository;
         this.utilisateurRepository = utilisateurRepository;
     }
 
-    // GET /roles/ : renvoie la liste de tous les libellés des rôles
+    /**
+     * Récupère la liste de tous les libellés des rôles.
+     *
+     * @return une liste de RoleDto (libellés des rôles)
+     * @see RoleDto
+     */
     @GetMapping("/")
     public List<RoleDto> getAllRolesLibelle() {
         List<Role> roles = roleRepository.findAll();
@@ -36,7 +52,13 @@ public class RoleController {
                 .toList();
     }
 
-    // GET /roles/utilisateur/{matricule} : renvoie le libelle du rôle d'un utilisateur précis
+    /**
+     * Récupère le libellé du rôle d'un utilisateur à partir de son matricule.
+     *
+     * @param matricule le matricule de l'utilisateur
+     * @return une liste contenant le RoleDto correspondant, ou une liste vide si non trouvé
+     * @see RoleDto
+     */
     @GetMapping("/utilisateur/{matricule}")
     public List<RoleDto> getRoleLibelleByUtilisateur(@PathVariable String matricule) {
         Utilisateur utilisateur = utilisateurRepository.findByMatricule(matricule);

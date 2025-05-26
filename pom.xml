@@ -2,6 +2,7 @@
 <!--
     Fichier de configuration Maven (pom.xml)
     Ce fichier décrit la structure, les dépendances et la configuration de build de ton projet Java/Spring Boot.
+    @author CDA Afpa Emi
 -->
 
 <project xmlns="http://maven.apache.org/POM/4.0.0"
@@ -108,22 +109,28 @@
         </dependency>
 
         <!--
-            Spring Boot Starter Thymeleaf
+            Spring Boot Starter Thymeleaf (optionnel)
             - Permet de générer des pages HTML côté serveur avec le moteur de template Thymeleaf
             - Utile si tu veux faire des vues web dynamiques (MVC)
         -->
-
-
-        <!-- <dependency>
+        <!--
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
-        </dependency> -->
+        </dependency>
+        -->
 
-        <!-- <dependency>
+        <!--
+            Lombok (optionnel)
+            - Génère automatiquement les getters/setters/constructeurs pour alléger le code Java
+        -->
+        <!--
+        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
-        </dependency> -->
+        </dependency>
+        -->
 
         <!-- Jackson pour JSON -->
         <dependency>
@@ -134,7 +141,6 @@
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-jsr310</artifactId>
         </dependency>
-        
     </dependencies>
 
     <!--

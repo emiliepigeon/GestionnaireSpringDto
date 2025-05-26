@@ -9,36 +9,113 @@ import jakarta.persistence.Table;
 
 /**
  * Entité Module qui représente un module de formation.
+ * Cette classe est mappée sur la table "module" en base de données.
+ *
+ * @author CDA Afpa Emi
  */
 @Entity
 @Table(name = "module")
 public class Module {
 
+    /**
+     * Identifiant unique du module (clé primaire, auto-générée).
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Nom du module
+    /**
+     * Nom du module.
+     */
     @Column(nullable = false)
     private String nom;
 
-    // Description du module
+    /**
+     * Description du module.
+     */
     @Column(nullable = false)
     private String description;
 
-    // Statut actif ou non
+    /**
+     * Statut du module (actif ou non).
+     */
     @Column(nullable = false)
     private Boolean statut;
 
-    // Constructeur vide obligatoire pour JPA
+    /**
+     * Constructeur vide obligatoire pour JPA.
+     */
     public Module() {}
 
-    // Getters et setters
-    public Long getId() { return id; }
-    public String getNom() { return nom; }
-    public void setNom(String nom) { this.nom = nom; }
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
-    public Boolean getStatut() { return statut; }
-    public void setStatut(Boolean statut) { this.statut = statut; }
+    /**
+     * Retourne l'identifiant du module.
+     *
+     * @return l'id du module
+     */
+    public Long getId() {
+        return id;
+    }
+
+    /**
+     * Définit l'identifiant du module.
+     *
+     * @param id l'id du module
+     */
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    /**
+     * Retourne le nom du module.
+     *
+     * @return le nom du module
+     */
+    public String getNom() {
+        return nom;
+    }
+
+    /**
+     * Définit le nom du module.
+     *
+     * @param nom le nom du module
+     */
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+
+    /**
+     * Retourne la description du module.
+     *
+     * @return la description du module
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * Définit la description du module.
+     *
+     * @param description la description du module
+     */
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    /**
+     * Retourne le statut du module (actif ou non).
+     *
+     * @return le statut du module
+     */
+    public Boolean getStatut() {
+        return statut;
+    }
+
+    /**
+     * Définit le statut du module.
+     *
+     * @param statut le statut du module
+     */
+    public void setStatut(Boolean statut) {
+        this.statut = statut;
+    }
 }

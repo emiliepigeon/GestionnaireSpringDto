@@ -1,61 +1,77 @@
 package com.emi.GestionnaireFormation.controller;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.emi.GestionnaireFormation.dto.ModuleDto;
 import com.emi.GestionnaireFormation.model.Module;
 import com.emi.GestionnaireFormation.service.ModuleService;
 
 /**
- * Contrôleur REST pour l'entité Module.
+ * Contrôleur REST pour gérer les modules.
+ * Utilise ModuleDto pour exposer uniquement les champs nécessaires.
+ *
+ * @author CDA Afpa Emi
  */
 @RestController
-@RequestMapping("/modules") // Toutes les routes commencent par /modules
+@RequestMapping("/modules")
 public class ModuleController {
 
     private final ModuleService moduleService;
 
-    // Injection du service via le constructeur
+    /**
+     * Injection du service ModuleService.
+     */
     public ModuleController(ModuleService moduleService) {
         this.moduleService = moduleService;
     }
 
-    // GET /modules ou /modules/
-    @GetMapping({"", "/"})
-    public List<Module> getAllModules() {
-        return moduleService.getAllModules();
+    /**
+     * Récupère tous les modules et les convertit en DTO.
+     *
+     * @return liste de ModuleDto
+     */
+    @GetMapping
+    public List<ModuleDto> getAllModules() {
+        return moduleService.getAllModules().stream()
+                .map(this::toDto)
+                .collect(Collectors.toList());
     }
 
-    // GET /modules/{id}
-    @GetMapping("/{id}")
-    public Optional<Module> getModuleById(@PathVariable Long id) {
-        return moduleService.getModuleById(id);
+    /**
+     * Crée un nouveau module à partir d'un DTO.
+     *
+     * @param dto les données du module à créer
+     * @return le module créé sous forme de DTO
+     */
+    @PostMapping
+    public ModuleDto createModule(@RequestBody ModuleDto dto) {
+        Module module = new Module();
+        module.setNom(dto.getNom());
+        module.setDescription(dto.getDescription());
+        // On ne gère pas statut ni id ici
+
+        Module saved = moduleService.createModule(module);
+        return toDto(saved);
     }
 
-    // POST /modules/create
-    @PostMapping("/create")
-    public Module createModule(@RequestBody Module module) {
-        return moduleService.createModule(module);
-    }
-
-    // PUT /modules/update/{id}
-    @PutMapping("/update/{id}")
-    public Optional<Module> updateModule(@PathVariable Long id, @RequestBody Module details) {
-        return moduleService.updateModule(id, details);
-    }
-
-    // DELETE /modules/delete/{id}
-    @DeleteMapping("/delete/{id}")
-    public void deleteModule(@PathVariable Long id) {
-        moduleService.deleteModule(id);
+    /**
+     * Convertit une entité Module en DTO.
+     *
+     * @param module l'entité Module
+     * @return le DTO correspondant
+     */
+    private ModuleDto toDto(Module module) {
+        ModuleDto dto = new ModuleDto();
+        dto.setNom(module.getNom());
+        dto.setDescription(module.getDescription());
+        // On n'expose pas statut
+        return dto;
     }
 }

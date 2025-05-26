@@ -248,10 +248,29 @@ src/
 
 
 ------------------------------------------------------------------------------------------
-22 et 23 mai 2025
+22 / 23 mai 2025
 
 ### Évolution V2 de l'API
 ### Intégration du DTO => création du package DTO [UtilisateurDto et RoleDto] ###
 
 
 
+------------------------------------------------------------------------------------------
+26 mai 2025
+
+### Évolution V2 de l'API suitedu Dto
+### Intégration du DTO => création du package DTO [FormationDto / CentreDto / ModuleDto et SequenceDto] ###
+
+### Ajout des annotations spécifique pour générer la JavaDoc
+
+ mvn clean spring-boot:run
+
+## 🟢 À retenir
+
+    Aucun appel à un champ ou méthode inexistant dans le DTO.
+
+    Chaque méthode et classe est commentée pour t’aider à comprendre le rôle de chaque partie.
+
+    Tu peux compléter l’exemple pour les autres entités (Centre, Utilisateur, etc.) en suivant ce modèle.
+
+------------------------------------------------------------------------------------------

@@ -16,18 +16,32 @@ import com.emi.GestionnaireFormation.dto.UtilisateurDto;
 import com.emi.GestionnaireFormation.model.Utilisateur;
 import com.emi.GestionnaireFormation.repository.UtilisateurRepository;
 
-// Contrôleur qui gère les routes pour les utilisateurs
+/**
+ * Contrôleur REST qui gère les routes pour les utilisateurs.
+ * Permet de gérer les opérations CRUD sur les utilisateurs de la plateforme.
+ *
+ * @author CDA Afpa Emi
+ */
 @RestController
 @RequestMapping("/utilisateurs")
 public class UtilisateurController {
 
     private final UtilisateurRepository utilisateurRepository;
 
+    /**
+     * Constructeur pour l'injection du repository UtilisateurRepository.
+     *
+     * @param utilisateurRepository repository pour l'entité Utilisateur
+     */
     public UtilisateurController(UtilisateurRepository utilisateurRepository) {
         this.utilisateurRepository = utilisateurRepository;
     }
 
-    // Récupérer tous les utilisateurs (GET)
+    /**
+     * Récupère la liste de tous les utilisateurs.
+     *
+     * @return une liste de UtilisateurDto
+     */
     @GetMapping("/")
     public List<UtilisateurDto> findAll() {
         List<Utilisateur> utilisateurs = utilisateurRepository.findAll();
@@ -46,7 +60,12 @@ public class UtilisateurController {
         }).collect(Collectors.toList());
     }
 
-    // Récupérer un utilisateur par son matricule (GET)
+    /**
+     * Récupère un utilisateur par son matricule.
+     *
+     * @param matricule le matricule de l'utilisateur
+     * @return le UtilisateurDto correspondant, ou null si non trouvé
+     */
     @GetMapping("/{matricule}")
     public UtilisateurDto findByMatricule(@PathVariable String matricule) {
         Utilisateur utilisateur = utilisateurRepository.findByMatricule(matricule);
@@ -62,7 +81,12 @@ public class UtilisateurController {
         return dto;
     }
 
-    // Ajouter un utilisateur (POST)
+    /**
+     * Ajoute un nouvel utilisateur.
+     *
+     * @param utilisateurDto le DTO de l'utilisateur à créer
+     * @return le DTO de l'utilisateur créé
+     */
     @PostMapping("/create")
     public UtilisateurDto createUtilisateur(@RequestBody UtilisateurDto utilisateurDto) {
         Utilisateur utilisateur = new Utilisateur();
@@ -86,7 +110,13 @@ public class UtilisateurController {
         return dto;
     }
 
-    // Modifier un utilisateur (PUT)
+    /**
+     * Modifie un utilisateur existant.
+     *
+     * @param matricule le matricule de l'utilisateur à modifier
+     * @param utilisateurDto le DTO contenant les nouvelles valeurs
+     * @return le DTO de l'utilisateur mis à jour, ou null si non trouvé
+     */
     @PutMapping("/update/{matricule}")
     public UtilisateurDto updateUtilisateur(@PathVariable String matricule, @RequestBody UtilisateurDto utilisateurDto) {
         Utilisateur utilisateur = utilisateurRepository.findByMatricule(matricule);
@@ -109,7 +139,11 @@ public class UtilisateurController {
         return dto;
     }
 
-    // Supprimer un utilisateur (DELETE)
+    /**
+     * Supprime un utilisateur par son matricule.
+     *
+     * @param matricule le matricule de l'utilisateur à supprimer
+     */
     @DeleteMapping("/delete/{matricule}")
     public void deleteUtilisateur(@PathVariable String matricule) {
         Utilisateur utilisateur = utilisateurRepository.findByMatricule(matricule);

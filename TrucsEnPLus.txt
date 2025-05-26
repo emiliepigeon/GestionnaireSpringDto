@@ -95,3 +95,117 @@ ____________________________________________________________________
 ('Modélisation SQL', 'Concevoir un schéma relationnel', 1, true, 4),
 ('Requêtes de base', 'SELECT, INSERT, UPDATE, DELETE', 2, true, 4),
 ('Déploiement sur serveur', 'Publier une application', 1, false, 5);
+
+
+-----------------------------------------------------------------------------------------------
+
+ICONS pour cutomiser mes README
+
+En Markdown pour un README (notamment sur GitHub), je peux insérer des icônes (pictos) de plusieurs façons :
+
+---
+
+## 🌟 Les pictos que je peux utiliser dans un README
+
+### 1. **Émojis standards Unicode**
+C’est la méthode la plus simple et universelle.  
+Je peux copier-coller n’importe quel émoji dans mon texte, il s’affichera partout (titres, listes, paragraphes).
+
+**Exemples d’émojis utiles pour un README :**
+
+- 🚀 (lancement, démarrage)
+- 📦 (installation, package)
+- 🛠️ (outils, configuration)
+- 📝 (documentation)
+- 📚 (ressources, lecture)
+- 🔗 (liens)
+- 🖥️ (ordinateur, code)
+- 🧰 (boîte à outils)
+- 💡 (astuce, idée)
+- ⚠️ (attention)
+- ✅ (ok, validé)
+- ❌ (erreur)
+- 🔒 (sécurité)
+- 👤 (utilisateur)
+- 🗂️ (organisation, fichiers)
+- 📁 (dossier)
+- 📄 (fichier)
+- 🎯 (objectif)
+- ✨ (nouveauté, fonctionnalité)
+- 📊 (statistiques)
+- 🕒 (temps)
+- 🔥 (important, performant)
+- 🧪 (test)
+- 🐞 (bug)
+- 🧑‍💻 (développeur)
+- 🏁 (fin, objectif atteint)
+- 🌐 (web)
+- 📅 (date)
+- 🎉 (succès, fête)
+- 🤖 (automatisation)
+- 🏗️ (construction, en cours)
+- 🏆 (succès)
+- 🔍 (recherche)
+- 📌 (important)
+- 🏠 (accueil)
+- 🏢 (organisation)
+- 📬 (contact)
+- 🏷️ (étiquette, tag)
+- 🛡️ (sécurité)
+- 🏷️ (étiquette)
+- 🧭 (navigation)
+
+---
+
+### 2. **Icônes avec images**
+Je peux insérer des images (petites icônes .png ou .svg) dans mon README, mais il faut qu’elles soient hébergées quelque part (dans le projet ou en ligne) :
+
+```markdown
+![logo](https://exemple.com/mon-icone.png)
+```
+Mais ce n’est pas aussi universel ni rapide que les émojis.
+
+---
+
+### 3. **Icônes FontAwesome ou autres**
+Sur GitHub, je ne peux pas utiliser directement FontAwesome ou d’autres bibliothèques d’icônes dans un README standard, sauf sur certains générateurs de documentation ou plateformes spécifiques[2].  
+Donc, je privilégie les émojis pour la compatibilité maximale.
+
+---
+
+## 💡 Astuce
+Pour trouver un émoji, j’utilise [emojipedia.org](https://emojipedia.org/) ou le clavier émoji de mon système (Win + . sous Windows, Cmd + Ctrl + Espace sous Mac).
+
+---
+
+**En résumé** :  
+Je peux insérer tous les émojis que je veux dans mon README, dans les titres, listes, ou paragraphes, pour rendre la lecture plus agréable et visuelle[3][5][6][7].  
+C’est simple, rapide, et compatible partout sur GitHub !
+
+Smileys & émotions
+
+😀 😃 😄 😁 😆 😅 😂 🤣 😊 😇 🙂 🙃 😉 😌 😍 🥰 😘 😗 😙 😚 😋 😛 😜 🤪 😝 🤑 🤗 🤭 🤫 🤔 🤐 🤨 😐 😑 😶 🙄 😏 😣 😥 😮 🤐 😯 😪 😫 😴 😌 😛 😜 😝 🤤 😒 😓 😔 😕 🙃 🥳 😎 🤓 🧐 😕 😟 😢 😭 😤 😠 😡 🤬 🤯 😳 🥺 😦 😧 😨 😰 😥 😢 😭 😱 😖 😣 😞 😓 😩 😫 🥱 😤 😡 😠 🤬 😈 👿 💀 ☠️ 👻 👽 🤖 🎃 😺 😸 😹 😻 😼 😽 🙀 😿 😾
+Gestes & mains
+
+👋 🤚 ✋ 🖐 🖖 👌 🤌 🤏 ✌️ 🤞 🤟 🤘 🤙 👈 👉 👆 🖕 👇 👍 👎 ✊ 👊 🤛 🤜 👏 🙌 👐 🤲 🤝 🙏
+Personnes & corps
+
+👶 🧒 👦 👧 🧑 👨 👩 🧔 👴 👵 🙍 🙎 🙅 🙆 💁 🙋 🙇 🤦 🤷 🧏 🙉 🙈 🙊
+Animaux & nature
+
+🐶 🐱 🐭 🐹 🐰 🦊 🐻 🐼 🐨 🐯 🦁 🐮 🐷 🐸 🐵 🦄 🐔 🦉 🦇 🐝 🐛 🦋 🐌 🐞 🐜 🦟 🦗 🐢 🐍 🦎 🐙 🦑 🦐 🦀 🐡 🐠 🐟 🐬 🐳 🐋 🦈 🐊 🦧 🐘 🦏 🦛 🐪 🐫 🦙 🦒 🦘 🦥 🦦 🦨 🦡 🐓 🦃 🦚 🦜 🦢 🦩 🕊️ 🐇 🦝 🦨 🦡 🦦 🦥
+Nourriture & boissons
+
+🍏 🍎 🍐 🍊 🍋 🍌 🍉 🍇 🍓 🫐 🍈 🍒 🍑 🥭 🍍 🥥 🥝 🍅 🥑 🍆 🥔 🥕 🌽 🌶️ 🥒 🥬 🥦 🧄 🧅 🍄 🥜 🌰 🍞 🥐 🥖 🥨 🥯 🥞 🧇 🧀 🍖 🍗 🥩 🥓 🍔 🍟 🍕 🌭 🥪 🌮 🌯 🥗 🥘 🥫 🍝 🍜 🍲 🍛 🍣 🍱 🍤 🍙 🍚 🍘 🍥 🥠 🥡 🍦 🍧 🍨 🍩 🍪 🎂 🍰 🧁 🍫 🍬 🍭 🍮 🍯 🍼 ☕ 🍵 🍶 🍺 🍻 🥂 🍷 🥃 🍸 🍹 🧉 🧃 🧊
+Objets & symboles
+
+⌚ 📱 📲 💻 🖥️ 🖨️ 🖱️ 🖲️ 🕹️ 🗜️ 💽 💾 💿 📀 🎥 🎬 📷 📸 📹 📺 📻 🎙️ 🎚️ 🎛️ ⏰ ⏱️ ⏲️ ⏳ ⌛ 🔋 🔌 💡 🔦 🕯️ 🪔 🧯 🛢️ 💸 💵 💴 💶 💷 💰 💳 🧾 💎 ⚖️ 🔧 🔨 ⚒️ 🛠️ ⛏️ 🔩 ⚙️ 🗜️ ⚗️ 🔬 🔭 📡 💉 💊 🚪 🛏️ 🛋️ 🚽 🚿 🛁 🪑 🧴 🧷 🧹 🧺 🧻 🧼 🧽 🪥 🧯
+Transports & lieux
+
+🚗 🚕 🚙 🚌 🚎 🏎️ 🚓 🚑 🚒 🚐 🛻 🚚 🚛 🚜 🦽 🦼 🛴 🚲 🛵 🏍️ 🚨 🚔 🚍 🚘 🚖 🚡 🚠 🚟 🚃 🚋 🚞 🚝 🚄 🚅 🚈 🚂 🚆 🚇 🚊 🚉 ✈️ 🛫 🛬 🛩️ 🛥️ 🚤 ⛵ 🛶 🚢 🚀 🛸 🛎️ 🏰 🏯 🏠 🏡 🏢 🏬 🏭 🏣 🏤 🏥 🏦 🏨 🏩 🏪 🏫 🏩 🕍 ⛪ 🕌 🛕 🕋 ⛩️ 🛤️ 🛣️ 🏞️ 🏜️ 🏝️ 🏖️ 🏕️ ⛺
+
+Pour une liste complète et mise à jour, je peux consulter :
+
+    Unicode Full Emoji List v16.0
+
+    Emojipedia
