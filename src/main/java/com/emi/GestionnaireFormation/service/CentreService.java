@@ -60,19 +60,11 @@ public class CentreService {
     /**
      * Met à jour un centre existant.
      *
-     * @param id l'identifiant du centre à modifier
-     * @param details les nouvelles valeurs du centre
-     * @return un Optional contenant le centre mis à jour s'il existe, sinon vide
+     * @param centre l'entité Centre à mettre à jour (doit contenir l'id)
+     * @return le centre mis à jour
      */
-    public Optional<Centre> updateCentre(Long id, Centre details) {
-        return centreRepository.findById(id).map(centre -> {
-            centre.setNom(details.getNom());
-            centre.setAdresse(details.getAdresse());
-            centre.setCodePostal(details.getCodePostal());
-            centre.setVille(details.getVille());
-            centre.setStatut(details.getStatut());
-            return centreRepository.save(centre);
-        });
+    public Centre updateCentre(Centre centre) {
+        return centreRepository.save(centre);
     }
 
     /**

@@ -3,17 +3,12 @@ package com.emi.GestionnaireFormation.controller;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.emi.GestionnaireFormation.dto.UtilisateurDto;
+import com.emi.GestionnaireFormation.model.Role;
 import com.emi.GestionnaireFormation.model.Utilisateur;
+import com.emi.GestionnaireFormation.repository.RoleRepository;
 import com.emi.GestionnaireFormation.repository.UtilisateurRepository;
 
 /**
@@ -27,92 +22,48 @@ import com.emi.GestionnaireFormation.repository.UtilisateurRepository;
 public class UtilisateurController {
 
     private final UtilisateurRepository utilisateurRepository;
+    private final RoleRepository roleRepository;
 
-    /**
-     * Constructeur pour l'injection du repository UtilisateurRepository.
-     *
-     * @param utilisateurRepository repository pour l'entité Utilisateur
-     */
-    public UtilisateurController(UtilisateurRepository utilisateurRepository) {
+    public UtilisateurController(UtilisateurRepository utilisateurRepository, RoleRepository roleRepository) {
         this.utilisateurRepository = utilisateurRepository;
+        this.roleRepository = roleRepository;
     }
 
     /**
      * Récupère la liste de tous les utilisateurs.
-     *
      * @return une liste de UtilisateurDto
      */
     @GetMapping("/")
     public List<UtilisateurDto> findAll() {
         List<Utilisateur> utilisateurs = utilisateurRepository.findAll();
-        // On transforme chaque Utilisateur en UtilisateurDto
-        return utilisateurs.stream().map(utilisateur -> {
-            UtilisateurDto dto = new UtilisateurDto();
-            dto.setMatricule(utilisateur.getMatricule());
-            dto.setNom(utilisateur.getNom());
-            dto.setPrenom(utilisateur.getPrenom());
-            dto.setAdresseMail(utilisateur.getAdresseMail());
-            // On récupère le libelle du rôle s'il existe
-            if (utilisateur.getRole() != null) {
-                dto.setRoleLibelle(utilisateur.getRole().getLibelle());
-            }
-            return dto;
-        }).collect(Collectors.toList());
+        return utilisateurs.stream().map(this::toDto).collect(Collectors.toList());
     }
 
     /**
      * Récupère un utilisateur par son matricule.
-     *
      * @param matricule le matricule de l'utilisateur
      * @return le UtilisateurDto correspondant, ou null si non trouvé
      */
     @GetMapping("/{matricule}")
     public UtilisateurDto findByMatricule(@PathVariable String matricule) {
         Utilisateur utilisateur = utilisateurRepository.findByMatricule(matricule);
-        if (utilisateur == null) return null;
-        UtilisateurDto dto = new UtilisateurDto();
-        dto.setMatricule(utilisateur.getMatricule());
-        dto.setNom(utilisateur.getNom());
-        dto.setPrenom(utilisateur.getPrenom());
-        dto.setAdresseMail(utilisateur.getAdresseMail());
-        if (utilisateur.getRole() != null) {
-            dto.setRoleLibelle(utilisateur.getRole().getLibelle());
-        }
-        return dto;
+        return utilisateur != null ? toDto(utilisateur) : null;
     }
 
     /**
      * Ajoute un nouvel utilisateur.
-     *
      * @param utilisateurDto le DTO de l'utilisateur à créer
      * @return le DTO de l'utilisateur créé
      */
     @PostMapping("/create")
     public UtilisateurDto createUtilisateur(@RequestBody UtilisateurDto utilisateurDto) {
-        Utilisateur utilisateur = new Utilisateur();
-        utilisateur.setMatricule(utilisateurDto.getMatricule());
-        utilisateur.setNom(utilisateurDto.getNom());
-        utilisateur.setPrenom(utilisateurDto.getPrenom());
-        utilisateur.setAdresseMail(utilisateurDto.getAdresseMail());
-        // Pour le rôle, il faut aller chercher l'objet Role en base selon le libelle (à faire dans le service)
-        // utilisateur.setRole(...);
-
+        Utilisateur utilisateur = toEntity(utilisateurDto);
         Utilisateur saved = utilisateurRepository.save(utilisateur);
-
-        UtilisateurDto dto = new UtilisateurDto();
-        dto.setMatricule(saved.getMatricule());
-        dto.setNom(saved.getNom());
-        dto.setPrenom(saved.getPrenom());
-        dto.setAdresseMail(saved.getAdresseMail());
-        if (saved.getRole() != null) {
-            dto.setRoleLibelle(saved.getRole().getLibelle());
-        }
-        return dto;
+        return toDto(saved);
     }
 
     /**
      * Modifie un utilisateur existant.
-     *
      * @param matricule le matricule de l'utilisateur à modifier
      * @param utilisateurDto le DTO contenant les nouvelles valeurs
      * @return le DTO de l'utilisateur mis à jour, ou null si non trouvé
@@ -124,24 +75,13 @@ public class UtilisateurController {
         utilisateur.setNom(utilisateurDto.getNom());
         utilisateur.setPrenom(utilisateurDto.getPrenom());
         utilisateur.setAdresseMail(utilisateurDto.getAdresseMail());
-        // Pour le rôle, à compléter si besoin
-
+        utilisateur.setRoles(getRolesFromLibelles(utilisateurDto.getRoleLibelle())); // MODIF: gestion des rôles multiples
         Utilisateur updated = utilisateurRepository.save(utilisateur);
-
-        UtilisateurDto dto = new UtilisateurDto();
-        dto.setMatricule(updated.getMatricule());
-        dto.setNom(updated.getNom());
-        dto.setPrenom(updated.getPrenom());
-        dto.setAdresseMail(updated.getAdresseMail());
-        if (updated.getRole() != null) {
-            dto.setRoleLibelle(updated.getRole().getLibelle());
-        }
-        return dto;
+        return toDto(updated);
     }
 
     /**
      * Supprime un utilisateur par son matricule.
-     *
      * @param matricule le matricule de l'utilisateur à supprimer
      */
     @DeleteMapping("/delete/{matricule}")
@@ -150,5 +90,52 @@ public class UtilisateurController {
         if (utilisateur != null) {
             utilisateurRepository.delete(utilisateur);
         }
+    }
+
+    /**
+     * Convertit un Utilisateur en UtilisateurDto.
+     * @param utilisateur l'entité Utilisateur
+     * @return le DTO correspondant
+     */
+    private UtilisateurDto toDto(Utilisateur utilisateur) {
+        UtilisateurDto dto = new UtilisateurDto();
+        dto.setMatricule(utilisateur.getMatricule());
+        dto.setNom(utilisateur.getNom());
+        dto.setPrenom(utilisateur.getPrenom());
+        dto.setAdresseMail(utilisateur.getAdresseMail());
+        // MODIF: gestion des rôles multiples
+        dto.setRoleLibelle(utilisateur.getRoles().stream()
+            .map(Role::getLibelle)
+            .collect(Collectors.toList()));
+        return dto;
+    }
+
+    /**
+     * Convertit un UtilisateurDto en Utilisateur.
+     * @param dto le DTO
+     * @return l'entité Utilisateur
+     */
+    private Utilisateur toEntity(UtilisateurDto dto) {
+        Utilisateur utilisateur = new Utilisateur();
+        utilisateur.setMatricule(dto.getMatricule());
+        utilisateur.setNom(dto.getNom());
+        utilisateur.setPrenom(dto.getPrenom());
+        utilisateur.setAdresseMail(dto.getAdresseMail());
+        utilisateur.setRoles(getRolesFromLibelles(dto.getRoleLibelle())); // MODIF
+        return utilisateur;
+    }
+
+    /**
+     * Récupère les rôles à partir d'une liste de libellés.
+     * @param libelles liste des libellés de rôles
+     * @return Set<Role>
+     */
+    private java.util.Set<Role> getRolesFromLibelles(List<String> libelles) {
+        return libelles == null ? new java.util.HashSet<>() :
+            libelles.stream()
+                .map(roleRepository::findByLibelle)
+                .filter(java.util.Optional::isPresent)
+                .map(java.util.Optional::get)
+                .collect(Collectors.toSet());
     }
 }

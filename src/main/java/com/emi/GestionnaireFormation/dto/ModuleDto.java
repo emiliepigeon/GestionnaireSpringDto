@@ -18,11 +18,21 @@ public class ModuleDto {
      */
     private String description;
 
-
     /**
      * Constructeur vide obligatoire.
      */
     public ModuleDto() {}
+
+    /**
+     * Constructeur plein utilisant les setters.
+     *
+     * @param nom le nom du module
+     * @param description la description du module
+     */
+    public ModuleDto(String nom, String description) {
+        setNom(nom);
+        setDescription(description);
+    }
 
     /**
      * Retourne le nom du module.
@@ -59,7 +69,4 @@ public class ModuleDto {
     public void setDescription(String description) {
         this.description = description;
     }
-
-
-    
 }

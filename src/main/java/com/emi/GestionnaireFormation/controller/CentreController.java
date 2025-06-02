@@ -1,17 +1,15 @@
 package com.emi.GestionnaireFormation.controller;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.emi.GestionnaireFormation.dto.CentreDto;
 import com.emi.GestionnaireFormation.model.Centre;
 import com.emi.GestionnaireFormation.service.CentreService;
 
@@ -22,7 +20,7 @@ import com.emi.GestionnaireFormation.service.CentreService;
  * @author CDA Afpa Emi
  */
 @RestController
-@RequestMapping("/centres") // Toutes les routes commencent par /centres
+@RequestMapping("/centres")
 public class CentreController {
 
     private final CentreService centreService;
@@ -37,56 +35,47 @@ public class CentreController {
     }
 
     /**
-     * Récupère la liste de tous les centres de formation.
+     * Récupère la liste de tous les centres de formation sous forme de DTO.
      * 
-     * @return une liste de centres
+     * @return une liste de CentreDto
      */
     @GetMapping({"", "/"})
-    public List<Centre> getAllCentres() {
-        return centreService.getAllCentres();
+    public List<CentreDto> getAllCentres() {
+        return centreService.getAllCentres().stream()
+            .map(this::toDto)
+            .collect(Collectors.toList());
     }
 
     /**
-     * Récupère un centre de formation par son identifiant.
+     * Crée un nouveau centre de formation à partir d'un DTO.
      * 
-     * @param id l'identifiant du centre
-     * @return un Optional contenant le centre s'il existe, sinon Optional.empty()
-     */
-    @GetMapping("/{id}")
-    public Optional<Centre> getCentreById(@PathVariable Long id) {
-        return centreService.getCentreById(id);
-    }
-
-    /**
-     * Crée un nouveau centre de formation.
-     * 
-     * @param centre l'objet centre à créer
-     * @return le centre créé
+     * @param dto l'objet CentreDto à créer
+     * @return le centre créé sous forme de DTO
      */
     @PostMapping("/create")
-    public Centre createCentre(@RequestBody Centre centre) {
-        return centreService.createCentre(centre);
+    public CentreDto createCentre(@RequestBody CentreDto dto) {
+        Centre centre = toEntity(dto);
+        Centre saved = centreService.createCentre(centre);
+        return toDto(saved);
     }
 
-    /**
-     * Modifie un centre de formation existant.
-     * 
-     * @param id l'identifiant du centre à modifier
-     * @param details les nouvelles valeurs du centre
-     * @return un Optional contenant le centre mis à jour s'il existe, sinon Optional.empty()
-     */
-    @PutMapping("/update/{id}")
-    public Optional<Centre> updateCentre(@PathVariable Long id, @RequestBody Centre details) {
-        return centreService.updateCentre(id, details);
+    // Méthodes de conversion
+    private CentreDto toDto(Centre centre) {
+        return new CentreDto(
+            centre.getNom(),
+            centre.getAdresse(),
+            centre.getCodePostal(),
+            centre.getVille()
+        );
     }
 
-    /**
-     * Supprime un centre de formation par son identifiant.
-     * 
-     * @param id l'identifiant du centre à supprimer
-     */
-    @DeleteMapping("/delete/{id}")
-    public void deleteCentre(@PathVariable Long id) {
-        centreService.deleteCentre(id);
+    private Centre toEntity(CentreDto dto) {
+        Centre centre = new Centre();
+        centre.setNom(dto.getNom());
+        centre.setAdresse(dto.getAdresse());
+        centre.setCodePostal(dto.getCodePostal());
+        centre.setVille(dto.getVille());
+        // Vous pouvez définir un statut par défaut ici si besoin
+        return centre;
     }
 }

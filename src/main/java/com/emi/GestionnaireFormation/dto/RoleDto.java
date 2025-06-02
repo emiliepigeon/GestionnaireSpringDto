@@ -8,14 +8,12 @@ package com.emi.GestionnaireFormation.dto;
  */
 public class RoleDto {
 
-    /**
-     * Libellé du rôle (ex : "ADMIN", "USER").
-     */
     private String libelle;
+
+    public RoleDto() {}
 
     /**
      * Constructeur avec le libellé.
-     *
      * @param libelle le libellé du rôle
      */
     public RoleDto(String libelle) {
@@ -24,19 +22,13 @@ public class RoleDto {
 
     /**
      * Retourne le libellé du rôle.
-     *
      * @return le libellé du rôle
      */
-    public String getLibelle() {
-        return libelle;
-    }
+    public String getLibelle() { return libelle; }
 
     /**
      * Définit le libellé du rôle.
-     *
      * @param libelle le libellé du rôle
      */
-    public void setLibelle(String libelle) {
-        this.libelle = libelle;
-    }
+    public void setLibelle(String libelle) { this.libelle = libelle; }
 }

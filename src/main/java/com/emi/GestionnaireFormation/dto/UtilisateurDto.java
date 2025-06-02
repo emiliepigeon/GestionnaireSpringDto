@@ -1,131 +1,50 @@
 package com.emi.GestionnaireFormation.dto;
 
+import java.util.List;
+
 /**
  * DTO pour exposer les informations d'un utilisateur,
- * ainsi que le libellé de son rôle.
+ * ainsi que la liste des libellés de ses rôles.
  * Sert à transporter les données entre le backend et le frontend sans exposer l'entité JPA.
  *
  * @author CDA Afpa Emi
  */
 public class UtilisateurDto {
 
-    /**
-     * Matricule de l'utilisateur.
-     */
     private String matricule;
-
-    /**
-     * Nom de l'utilisateur.
-     */
     private String nom;
-
-    /**
-     * Prénom de l'utilisateur.
-     */
     private String prenom;
-
-    /**
-     * Adresse mail de l'utilisateur.
-     */
     private String adresseMail;
 
     /**
-     * Libellé du rôle de l'utilisateur (ex : "ADMIN").
+     * MODIF: La liste des libellés des rôles (plusieurs rôles possibles).
+     * Je débute : c'était une String, maintenant c'est List<String>.
      */
-    private String roleLibelle;
+    private List<String> roleLibelle;
 
-    /**
-     * Constructeur vide obligatoire.
-     */
     public UtilisateurDto() {}
 
-    /**
-     * Retourne le matricule de l'utilisateur.
-     *
-     * @return le matricule de l'utilisateur
-     */
-    public String getMatricule() {
-        return matricule;
-    }
+    public String getMatricule() { return matricule; }
+    public void setMatricule(String matricule) { this.matricule = matricule; }
+
+    public String getNom() { return nom; }
+    public void setNom(String nom) { this.nom = nom; }
+
+    public String getPrenom() { return prenom; }
+    public void setPrenom(String prenom) { this.prenom = prenom; }
+
+    public String getAdresseMail() { return adresseMail; }
+    public void setAdresseMail(String adresseMail) { this.adresseMail = adresseMail; }
 
     /**
-     * Définit le matricule de l'utilisateur.
-     *
-     * @param matricule le matricule de l'utilisateur
+     * Retourne la liste des libellés de rôles.
+     * @return liste des libellés
      */
-    public void setMatricule(String matricule) {
-        this.matricule = matricule;
-    }
+    public List<String> getRoleLibelle() { return roleLibelle; }
 
     /**
-     * Retourne le nom de l'utilisateur.
-     *
-     * @return le nom de l'utilisateur
+     * Définit la liste des libellés de rôles.
+     * @param roleLibelle liste des libellés
      */
-    public String getNom() {
-        return nom;
-    }
-
-    /**
-     * Définit le nom de l'utilisateur.
-     *
-     * @param nom le nom de l'utilisateur
-     */
-    public void setNom(String nom) {
-        this.nom = nom;
-    }
-
-    /**
-     * Retourne le prénom de l'utilisateur.
-     *
-     * @return le prénom de l'utilisateur
-     */
-    public String getPrenom() {
-        return prenom;
-    }
-
-    /**
-     * Définit le prénom de l'utilisateur.
-     *
-     * @param prenom le prénom de l'utilisateur
-     */
-    public void setPrenom(String prenom) {
-        this.prenom = prenom;
-    }
-
-    /**
-     * Retourne l'adresse mail de l'utilisateur.
-     *
-     * @return l'adresse mail de l'utilisateur
-     */
-    public String getAdresseMail() {
-        return adresseMail;
-    }
-
-    /**
-     * Définit l'adresse mail de l'utilisateur.
-     *
-     * @param adresseMail l'adresse mail de l'utilisateur
-     */
-    public void setAdresseMail(String adresseMail) {
-        this.adresseMail = adresseMail;
-    }
-
-    /**
-     * Retourne le libellé du rôle de l'utilisateur.
-     *
-     * @return le libellé du rôle
-     */
-    public String getRoleLibelle() {
-        return roleLibelle;
-    }
-
-    /**
-     * Définit le libellé du rôle de l'utilisateur.
-     *
-     * @param roleLibelle le libellé du rôle
-     */
-    public void setRoleLibelle(String roleLibelle) {
-        this.roleLibelle = roleLibelle;
-    }
+    public void setRoleLibelle(List<String> roleLibelle) { this.roleLibelle = roleLibelle; }
 }

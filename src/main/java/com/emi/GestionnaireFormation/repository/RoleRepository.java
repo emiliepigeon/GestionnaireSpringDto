@@ -1,5 +1,7 @@
 package com.emi.GestionnaireFormation.repository;
 
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -23,7 +25,7 @@ public interface RoleRepository extends JpaRepository<Role, Long> {
      * Recherche un rôle par son libellé.
      *
      * @param libelle le libellé du rôle (ex : "ADMIN", "USER")
-     * @return le rôle correspondant, ou null si non trouvé
+     * @return un Optional contenant le rôle s'il existe, sinon Optional.empty()
      */
-    Role findByLibelle(String libelle);
+    Optional<Role> findByLibelle(String libelle); // MODIF: Optional<Role>
 }

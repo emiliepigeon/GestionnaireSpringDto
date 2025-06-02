@@ -29,6 +29,19 @@ public class SequenceDto {
     public SequenceDto() {}
 
     /**
+     * Constructeur plein utilisant les setters.
+     *
+     * @param libelle le libellé de la séquence
+     * @param description la description de la séquence
+     * @param ordre l'ordre de la séquence dans le module
+     */
+    public SequenceDto(String libelle, String description, Integer ordre) {
+        setLibelle(libelle);
+        setDescription(description);
+        setOrdre(ordre);
+    }
+
+    /**
      * Retourne le libellé de la séquence.
      *
      * @return le libellé de la séquence
@@ -81,5 +94,4 @@ public class SequenceDto {
     public void setOrdre(Integer ordre) {
         this.ordre = ordre;
     }
-
 }

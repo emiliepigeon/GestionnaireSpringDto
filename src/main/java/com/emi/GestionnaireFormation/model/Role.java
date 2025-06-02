@@ -1,37 +1,54 @@
 package com.emi.GestionnaireFormation.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 
-// Cette classe représente un rôle (ex : ADMIN, USER)
+/**
+ * Entité Role qui représente un rôle (ex : ADMIN, USER).
+ * Cette classe est mappée sur la table "role".
+ *
+ * @author CDA Afpa Emi
+ */
 @Entity
 @Table(name = "role")
 public class Role {
-    @Id // identifiant unique
+
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false) // le libellé ne peut pas être null
+    @Column(nullable = false)
     private String libelle;
 
-    @Column(nullable = false) // le statut ne peut pas être null (actif/inactif)
+    @Column(nullable = false)
     private Boolean statut;
 
-    // Constructeur vide obligatoire pour JPA
+    /**
+     * MODIF: Relation ManyToMany pour permettre plusieurs utilisateurs par rôle.
+     * Je débute : avant il n'y avait pas cette relation inverse, maintenant il y a un Set<Utilisateur>.
+     */
+    @ManyToMany(mappedBy = "roles")
+    private Set<Utilisateur> utilisateurs = new HashSet<>();
+
     public Role() {}
 
-    // Getter pour l'id (lecture)
     public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    // Getter et setter pour libelle (lecture/écriture)
     public String getLibelle() { return libelle; }
     public void setLibelle(String libelle) { this.libelle = libelle; }
 
-    // Getter et setter pour statut (lecture/écriture)
     public Boolean getStatut() { return statut; }
     public void setStatut(Boolean statut) { this.statut = statut; }
+
+    public Set<Utilisateur> getUtilisateurs() { return utilisateurs; }
+    public void setUtilisateurs(Set<Utilisateur> utilisateurs) { this.utilisateurs = utilisateurs; }
 }

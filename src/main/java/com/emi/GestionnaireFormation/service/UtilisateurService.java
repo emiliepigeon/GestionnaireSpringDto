@@ -18,18 +18,12 @@ public class UtilisateurService {
 
     private final UtilisateurRepository utilisateurRepository;
 
-    /**
-     * Constructeur avec injection du repository UtilisateurRepository.
-     *
-     * @param utilisateurRepository le repository pour l'entité Utilisateur
-     */
     public UtilisateurService(UtilisateurRepository utilisateurRepository) {
         this.utilisateurRepository = utilisateurRepository;
     }
 
     /**
      * Retourne la liste de tous les utilisateurs.
-     *
      * @return une liste d'utilisateurs
      */
     public List<Utilisateur> findAll() {
@@ -38,7 +32,6 @@ public class UtilisateurService {
 
     /**
      * Recherche un utilisateur par son matricule.
-     *
      * @param matricule le matricule de l'utilisateur
      * @return l'utilisateur correspondant, ou null si non trouvé
      */
@@ -48,7 +41,6 @@ public class UtilisateurService {
 
     /**
      * Ajoute ou modifie un utilisateur.
-     *
      * @param utilisateur l'entité Utilisateur à sauvegarder
      * @return l'utilisateur sauvegardé
      */
@@ -58,7 +50,6 @@ public class UtilisateurService {
 
     /**
      * Supprime un utilisateur par son matricule.
-     *
      * @param matricule le matricule de l'utilisateur à supprimer
      */
     public void deleteByMatricule(String matricule) {
