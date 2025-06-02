@@ -10,12 +10,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.emi.GestionnaireFormation.dto.SequenceDto;
+import com.emi.GestionnaireFormation.mapper.SequenceMapper;
 import com.emi.GestionnaireFormation.model.Sequence;
 import com.emi.GestionnaireFormation.service.SequenceService;
 
 /**
  * Contrôleur REST pour gérer les séquences pédagogiques.
  * Utilise SequenceDto pour exposer uniquement les champs nécessaires.
+ * Utilise SequenceMapper pour convertir entité <-> DTO.
  *
  * @author CDA Afpa Emi
  */
@@ -25,9 +27,6 @@ public class SequenceController {
 
     private final SequenceService sequenceService;
 
-    /**
-     * Injection du service SequenceService.
-     */
     public SequenceController(SequenceService sequenceService) {
         this.sequenceService = sequenceService;
     }
@@ -40,7 +39,7 @@ public class SequenceController {
     @GetMapping
     public List<SequenceDto> getAllSequences() {
         return sequenceService.getAllSequences().stream()
-                .map(this::toDto)
+                .map(SequenceMapper::toDto) // Utilisation du mapper
                 .collect(Collectors.toList());
     }
 
@@ -52,28 +51,8 @@ public class SequenceController {
      */
     @PostMapping
     public SequenceDto createSequence(@RequestBody SequenceDto dto) {
-        Sequence sequence = new Sequence();
-        sequence.setLibelle(dto.getLibelle());
-        sequence.setDescription(dto.getDescription());
-        sequence.setOrdre(dto.getOrdre());
-        // On ne gère pas statut ni moduleId ici
-
+        Sequence sequence = SequenceMapper.toEntity(dto); // Utilisation du mapper
         Sequence saved = sequenceService.createSequence(sequence);
-        return toDto(saved);
-    }
-
-    /**
-     * Convertit une entité Sequence en DTO.
-     *
-     * @param sequence l'entité Sequence
-     * @return le DTO correspondant
-     */
-    private SequenceDto toDto(Sequence sequence) {
-        SequenceDto dto = new SequenceDto();
-        dto.setLibelle(sequence.getLibelle());
-        dto.setDescription(sequence.getDescription());
-        dto.setOrdre(sequence.getOrdre());
-        // On n'expose pas statut ni moduleId
-        return dto;
+        return SequenceMapper.toDto(saved); // Utilisation du mapper
     }
 }

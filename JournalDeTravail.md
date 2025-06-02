@@ -397,4 +397,98 @@ Elles facilitent aussi la maintenance et l’évolution de cette application.
 --------------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------------------
 
+## Suite d'avancement du projet fil rouge du formateur avec intégration de mappers
+--------------------------------------------------------------------------------------------
+## 02/06/25
+
+# 🌟 Ajout des Mappers dans mon projet Java
+Gestionnaire de formation
+
+Je fais référence aux fichiers sans les afficher, et je donne des exemples d’application dans le code.
+
+--------------------------------------------------------------------------------------------
+
+## 1. Avant modifictions
+
+📝 Avant, je faisais la conversion entre mes entités (comme Formation, Utilisateur…) et mes DTOs directement dans les contrôleurs ou les services. 
+
+Cela voulait dire que j’avais souvent du code de conversion copié-collé à plusieurs endroits, ce qui rendait le projet plus long, moins lisible et plus difficile à maintenir.
+
+--------------------------------------------------------------------------------------------
+
+## 2. Pourquoi j’ai ajouté des mappers ?
+
+💡 J’ai appris que la bonne pratique est de créer des **mappers** :  
+- Ce sont des classes dédiées qui s’occupent uniquement de convertir une entité en DTO et inversement.
+- Ça centralise la logique de conversion, évite la duplication de code et rend le projet plus propre.
+
+--------------------------------------------------------------------------------------------
+
+## 3. Après : Comment j’utilise les mappers
+
+✅ Maintenant, pour chaque entité principale (Formation, Utilisateur, Centre, Module, Sequence, Role),  
+j’ai créé un fichier mapper dans le dossier `mapper` de mon projet.
+
+Chaque mapper contient deux méthodes principales :
+- `toDto()` : convertit une entité en DTO.
+- `toEntity()` : convertit un DTO en entité.
+
+--------------------------------------------------------------------------------------------
+
+## 4. 📋 Application dans mes contrôleurs
+
+Dans mes contrôleurs, au lieu d’écrire la conversion à la main,  
+j’utilise simplement le mapper correspondant. 
+--------------------------------------------------------------------------------------------
+Par exemple, dans le contrôleur Formation :
+--------------------------------------------------------------------------------------------
+```java
+// Avant :
+FormationDto dto = new FormationDto();
+dto.setLibelle(formation.getLibelle());
+// ...
+
+// Après :
+FormationDto dto = FormationMapper.toDto(formation);
+```
+--------------------------------------------------------------------------------------------
+Pour créer une nouvelle formation à partir d’un DTO :
+--------------------------------------------------------------------------------------------
+```java
+// Avant :
+Formation formation = new Formation();
+formation.setLibelle(dto.getLibelle());
+// ...
+
+// Après :
+Formation formation = FormationMapper.toEntity(dto);
+```
+--------------------------------------------------------------------------------------------
+
+## 5. 🗂️ Nouvelle organisation (références de fichiers)
+
+- Tous mes mappers sont dans le dossier `mapper` (ex : `FormationMapper`, `UtilisateurMapper`, etc.).
+- Les DTOs sont dans le dossier `dto`.
+- Les entités sont dans le dossier `model`.
+- Les contrôleurs appellent les méthodes des mappers pour convertir entités et DTOs.
+
+--------------------------------------------------------------------------------------------
+
+## 6. Résumé avant/après
+
+| Avant                           | Après avec mappers                                |
+|----------------------------------|---------------------------------------------------|
+| Conversion partout dans le code  | Conversion centralisée dans les mappers           |
+| Beaucoup de répétition           | Code plus court et plus clair                     |
+| Risque d’oubli ou d’erreur       | Moins d’erreurs, plus facile à faire évoluer      |
+
+--------------------------------------------------------------------------------------------
+
+## 7. 🎯 Ce que ça m’apporte
+
+- Je gagne du temps quand j’ajoute ou modifie un champ dans une entité ou un DTO.
+- Mon code est plus lisible et plus professionnel.
+- Je suis plus sereine pour la suite de mon apprentissage !
+
+--------------------------------------------------------------------------------------------
 

@@ -9,14 +9,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.emi.GestionnaireFormation.dto.RoleDto;
-import com.emi.GestionnaireFormation.model.Role;
+import com.emi.GestionnaireFormation.mapper.RoleMapper;
 import com.emi.GestionnaireFormation.model.Utilisateur;
 import com.emi.GestionnaireFormation.repository.RoleRepository;
 import com.emi.GestionnaireFormation.repository.UtilisateurRepository;
 
 /**
- * Contrôleur REST qui gère les routes pour les rôles.
- * Permet de récupérer la liste des rôles et les rôles d'un utilisateur.
+ * Contrôleur REST pour les rôles.
+ * Utilise RoleDto pour exposer uniquement les champs nécessaires.
+ * Utilise RoleMapper pour convertir entité <-> DTO.
  *
  * @author CDA Afpa Emi
  */
@@ -33,19 +34,20 @@ public class RoleController {
     }
 
     /**
-     * Récupère la liste de tous les libellés des rôles.
-     * @return une liste de RoleDto (libellés des rôles)
+     * Récupère la liste de tous les rôles (libellés).
+     *
+     * @return une liste de RoleDto
      */
     @GetMapping("/")
     public List<RoleDto> getAllRolesLibelle() {
-        List<Role> roles = roleRepository.findAll();
-        return roles.stream()
-                .map(role -> new RoleDto(role.getLibelle()))
-                .collect(Collectors.toList());
+        return roleRepository.findAll().stream()
+            .map(RoleMapper::toDto) // Utilisation du mapper
+            .collect(Collectors.toList());
     }
 
     /**
-     * Récupère les libellés des rôles d'un utilisateur à partir de son matricule.
+     * Récupère les rôles d'un utilisateur à partir de son matricule.
+     *
      * @param matricule le matricule de l'utilisateur
      * @return une liste de RoleDto correspondant, ou une liste vide si non trouvé
      */
@@ -53,9 +55,8 @@ public class RoleController {
     public List<RoleDto> getRoleLibelleByUtilisateur(@PathVariable String matricule) {
         Utilisateur utilisateur = utilisateurRepository.findByMatricule(matricule);
         if (utilisateur != null && utilisateur.getRoles() != null) {
-            // MODIF: gestion des rôles multiples
             return utilisateur.getRoles().stream()
-                    .map(role -> new RoleDto(role.getLibelle()))
+                    .map(RoleMapper::toDto) // Utilisation du mapper
                     .collect(Collectors.toList());
         } else {
             return List.of();

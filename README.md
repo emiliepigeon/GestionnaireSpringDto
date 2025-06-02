@@ -356,3 +356,149 @@ N’hésite pas à l’utiliser comme base pour tes propres projets ou pour t’
 -----------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------
+
+Voir JournalDeTravail pour la suite des transformations du projet.
+-----------------------------------------------------------------------------------------------
+## 02/06/25 -> intégration de mappers
+-----------------------------------------------------------------------------------------------
+## ✨Ajout des Mappers :
+-----------------------------------------------------------------------------------------------
+1. Avant
+
+Avant, dans mon projet :
+
+    Je faisais la conversion entre les entités (par exemple Formation, Utilisateur…) et les DTOs (FormationDto, UtilisateurDto…) directement dans les contrôleurs ou les services.
+
+    J’avais souvent du code du genre :
+
+java
+    FormationDto dto = new FormationDto();
+    dto.setLibelle(formation.getLibelle());
+// etc.
+
+Cette conversion était répétée à plusieurs endroits, ce qui rendait le code long, moins lisible et difficile à maintenir.
+
+-----------------------------------------------------------------------------------------------
+2. Pourquoi changer ?
+
+    Je veux que mon code soit plus propre, plus facile à lire et à maintenir.
+
+    Je veux éviter de répéter la même logique de conversion partout.
+
+    J’ai appris que la bonne pratique, c’est d’utiliser des mappers : des classes dédiées qui font la conversion entre entités et DTOs.
+
+-----------------------------------------------------------------------------------------------
+3. ✨Après (avec les mappers)
+
+Maintenant, j’ai ajouté des mappers pour chaque entité principale.
+Un mapper est une classe qui contient des méthodes pour convertir une entité en DTO et inversement.
+
+Par exemple, pour Formation :
+
+    J’ai créé une classe FormationMapper avec deux méthodes :
+
+        toDto(Formation formation)
+
+        toEntity(FormationDto dto)
+
+Dans mes contrôleurs, au lieu de faire la conversion à la main, j’utilise simplement le mapper :
+
+java
+    FormationDto dto = FormationMapper.toDto(formation);
+    Formation formation = FormationMapper.toEntity(dto);
+
+-----------------------------------------------------------------------------------------------
+## ✨Nouvelle architecture du projet (commentée)
+
+Voici à quoi ressemble maintenant l’organisation de mes fichiers :
+src/main/java/com/emi/GestionnaireFormation/
+│
+├── controller/
+│   ├── FormationController.java      // Utilise FormationMapper
+│   ├── UtilisateurController.java    // Utilise UtilisateurMapper
+│   ├── CentreController.java         // Utilise CentreMapper
+│   ├── ModuleController.java         // Utilise ModuleMapper
+│   └── SequenceController.java       // Utilise SequenceMapper
+│
+├── dto/
+│   ├── FormationDto.java
+│   ├── UtilisateurDto.java
+│   ├── CentreDto.java
+│   ├── ModuleDto.java
+│   └── SequenceDto.java
+│
+├── mapper/
+│   ├── FormationMapper.java      // Conversion Formation <-> FormationDto
+│   ├── UtilisateurMapper.java    // Conversion Utilisateur <-> UtilisateurDto
+│   ├── CentreMapper.java         // Conversion Centre <-> CentreDto
+│   ├── ModuleMapper.java         // Conversion Module <-> ModuleDto
+│   └── SequenceMapper.java       // Conversion Sequence <-> SequenceDto
+│
+├── model/
+│   ├── Formation.java
+│   ├── Utilisateur.java
+│   ├── Centre.java
+│   ├── Module.java
+│   └── Sequence.java
+│
+├── repository/
+│   ├── FormationRepository.java
+│   ├── UtilisateurRepository.java
+│   ├── CentreRepository.java
+│   ├── ModuleRepository.java
+│   └── SequenceRepository.java
+│
+└── service/
+    ├── FormationService.java
+    ├── UtilisateurService.java
+    ├── CentreService.java
+    ├── ModuleService.java
+    └── SequenceService.java
+
+-----------------------------------------------------------------------------------------------
+## 👍Ce que ça change
+
+    Le code de mes contrôleurs et services est beaucoup plus court et plus clair.
+
+    Toute la logique de conversion est centralisée dans un seul endroit.
+
+    Si je dois changer la structure d’un DTO ou d’une entité, je n’ai qu’un seul fichier à modifier (le mapper).
+
+    C’est plus facile à relire et à faire évoluer
+
+
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+
+## 🔄 Les mappers : un pont entre mes fichiers
+
+Les mappers jouent maintenant un rôle central dans mon projet. Ils font le lien entre les entités (dans le dossier `model`) et les DTOs (dans le dossier `dto`). Grâce à eux, chaque fois que j’ai besoin d’envoyer des données à l’extérieur de mon application (par exemple, vers le frontend ou une API), je peux facilement convertir une entité en DTO. Inversement, quand je reçois des données du frontend, je peux convertir un DTO en entité avant de l’enregistrer en base de données.  
+-----------------------------------------------------------------------------------------------
+Cela crée une nouvelle relation :  
+-----------------------------------------------------------------------------------------------
+- Les **contrôleurs** n’ont plus à connaître les détails des entités ou des DTOs : ils appellent simplement les méthodes des mappers pour faire la conversion.
+-----------------------------------------------------------------------------------------------
+- Les **services** peuvent aussi utiliser les mappers pour préparer les données à envoyer ou à recevoir.
+-----------------------------------------------------------------------------------------------
+- Les **mappers** deviennent ainsi le point de passage obligé pour toute transformation entre le monde de la base de données (`model`) et le monde de l’échange de données (`dto`).
+
+
+-----------------------------------------------------------------------------------------------
+En résumé, chaque couche de mon application a maintenant un rôle plus clair et mieux séparé :  
+- Les **entités** représentent la structure en base de données (model).
+- Les **DTOs** servent à transporter les données vers l’extérieur ou l’intérieur.
+- Les **mappers** assurent la conversion entre les deux.
+- Les **contrôleurs** et **services** orchestrent ces échanges, mais sans avoir à se préoccuper des détails de conversion.
+-----------------------------------------------------------------------------------------------
+
+- Les **repositories** restent responsables de toute la communication avec la base de données.
+Ils permettent de récupérer, sauvegarder, modifier ou supprimer les entités, ce qui alimente ensuite les conversions via les mappers et les échanges avec les contrôleurs et services.
+
+-----------------------------------------------------------------------------------------------
+
+Cette organisation rend mon projet plus modulaire, plus facile à maintenir et à faire évoluer !
+
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
