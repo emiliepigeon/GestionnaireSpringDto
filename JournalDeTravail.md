@@ -491,4 +491,3 @@ Formation formation = FormationMapper.toEntity(dto);
 - Je suis plus sereine pour la suite de mon apprentissage !
 
 --------------------------------------------------------------------------------------------
-
