@@ -22,7 +22,7 @@ import com.emi.GestionnaireFormation.service.SequenceService;
  * @author CDA Afpa Emi
  */
 @RestController
-@RequestMapping("/sequences")
+@RequestMapping("/api/sequences")
 public class SequenceController {
 
     private final SequenceService sequenceService;

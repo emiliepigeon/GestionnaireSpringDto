@@ -22,7 +22,7 @@ import com.emi.GestionnaireFormation.service.CentreService;
  * @author CDA Afpa Emi
  */
 @RestController
-@RequestMapping("/centres")
+@RequestMapping("/api/centres")
 public class CentreController {
 
     private final CentreService centreService;

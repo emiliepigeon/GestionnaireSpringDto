@@ -22,7 +22,7 @@ import com.emi.GestionnaireFormation.service.ModuleService;
  * @author CDA Afpa Emi
  */
 @RestController
-@RequestMapping("/modules")
+@RequestMapping("/api/modules")
 public class ModuleController {
 
     private final ModuleService moduleService;

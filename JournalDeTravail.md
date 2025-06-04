@@ -496,3 +496,31 @@ Formation formation = FormationMapper.toEntity(dto);
 -> Intégration au UtilisateurController
 -> Création du package = security et du fichier 
     SecurityConfigAPI.java
+
+
+Modification des routes principal dans tous les controller
+"/api/non du modul"
+
+http://localhost:8080/api/utilisateurs -> 404 NOT FOUND
+http://localhost:8080/api/utilisateurs/ -> 200
+
+http://localhost:8080/api/roles -> 404 NOT FOUND
+http://localhost:8080/api/roles/ -> 200
+
+http://localhost:8080/api/centres/ -> 200
+http://localhost:8080/api/centre -> 200
+
+http://localhost:8080/api/modules -> 200
+http://localhost:8080/api/modules/ -> 404 NOT FOUND
+
+Problème avec postman (formation/sequence) => TODO CORRIGER A.S.A.P
+
+http://localhost:8080/api/formations -> 200
+http://localhost:8080/api/formations/ -> 404 NOT FOUND
+
+
+http://localhost:8080/api/sequences -> 200
+http://localhost:8080/api/sequences/ -> 404 NOT FOUND
+
+
+Besoin d'investiguer pour comprendre le pourquoi ?????

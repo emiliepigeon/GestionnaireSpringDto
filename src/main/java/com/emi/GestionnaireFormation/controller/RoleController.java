@@ -22,7 +22,7 @@ import com.emi.GestionnaireFormation.repository.UtilisateurRepository;
  * @author CDA Afpa Emi
  */
 @RestController
-@RequestMapping("/roles")
+@RequestMapping("/api/roles")
 public class RoleController {
 
     private final RoleRepository roleRepository;

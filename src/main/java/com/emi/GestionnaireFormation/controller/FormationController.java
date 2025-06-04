@@ -22,7 +22,7 @@ import com.emi.GestionnaireFormation.service.FormationService;
  * @author CDA Afpa Emi
  */
 @RestController
-@RequestMapping("/formations")
+@RequestMapping("/api/formations")
 public class FormationController {
 
     private final FormationService formationService;

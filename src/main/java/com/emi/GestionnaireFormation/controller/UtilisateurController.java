@@ -1,18 +1,25 @@
 package com.emi.GestionnaireFormation.controller;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.Objects;
 
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.emi.GestionnaireFormation.dto.UtilisateurDto;
+import com.emi.GestionnaireFormation.mapper.UtilisateurMapper;
 import com.emi.GestionnaireFormation.model.Role;
 import com.emi.GestionnaireFormation.model.Utilisateur;
 import com.emi.GestionnaireFormation.repository.RoleRepository;
 import com.emi.GestionnaireFormation.repository.UtilisateurRepository;
-import com.emi.GestionnaireFormation.mapper.UtilisateurMapper;
 
 /**
  * Contrôleur REST pour les utilisateurs.
@@ -22,7 +29,7 @@ import com.emi.GestionnaireFormation.mapper.UtilisateurMapper;
  * @author CDA Afpa Emi
  */
 @RestController
-@RequestMapping("/utilisateurs")
+@RequestMapping("/api/utilisateurs")
 public class UtilisateurController {
 
     private final UtilisateurRepository utilisateurRepository;
