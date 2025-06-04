@@ -491,3 +491,8 @@ Formation formation = FormationMapper.toEntity(dto);
 - Je suis plus sereine pour la suite de mon apprentissage !
 
 --------------------------------------------------------------------------------------------
+## 04/06/2025 Premier pas avec SpringSecurity
+
+-> Intégration au UtilisateurController
+-> Création du package = security et du fichier 
+    SecurityConfigAPI.java
