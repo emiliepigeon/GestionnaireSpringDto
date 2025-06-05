@@ -502,3 +502,17 @@ Cette organisation rend mon projet plus modulaire, plus facile à maintenir et �
 -----------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------
+## Start with Spring Security 04/06/25
+🔒 Ajout de Spring Security 
+
+👋 Je viens d’ajouter Spring Security à mon projet !
+
+    🔐 Maintenant, l’accès à l’application est sécurisé.
+
+    🛡️ Un mot de passe est demandé pour accéder aux pages.
+
+    👤 Un utilisateur de test est déjà configuré (voir le code).
+
+    🔄 Les mots de passe sont protégés grâce au hashage.
+
+    Grâce à Spring Security, mon application est plus sûre et prête pour gérer des utilisateurs ! 🚀
