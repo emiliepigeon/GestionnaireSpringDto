@@ -6,8 +6,8 @@
 -->
 
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <!-- Version du modèle Maven (toujours 4.0.0 pour les projets modernes) -->
     <modelVersion>4.0.0</modelVersion>
@@ -46,7 +46,7 @@
     <properties>
         <java.version>21</java.version>
     </properties>
-
+        <!-- ===================== LISTE DES DEPENDENCIES ===================== -->
     <!--
         Liste des dépendances utilisées dans le projet
         Chaque <dependency> ajoute une bibliothèque externe ou un module Spring Boot
@@ -61,7 +61,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
-
+        <!-- ===================== Spring Boot Starter Web ===================== -->
         <!--
             Spring Boot Starter Web
             - Permet de créer des applications web et des API REST
@@ -71,7 +71,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-
+        <!-- ===================== Spring Boot DevTools ===================== -->
         <!--
             Spring Boot DevTools
             - Fournit le rechargement automatique à chaud (hot reload)
@@ -85,7 +85,7 @@
             <scope>runtime</scope>
             <optional>true</optional>
         </dependency>
-
+        <!-- ===================== MySQL Connector/J ===================== -->
         <!--
             MySQL Connector/J
             - Le driver JDBC pour se connecter à une base de données MySQL
@@ -96,7 +96,7 @@
             <artifactId>mysql-connector-j</artifactId>
             <scope>runtime</scope>
         </dependency>
-
+        <!-- ===================== Spring Boot Starter Test ===================== -->
         <!--
             Spring Boot Starter Test
             - Fournit les outils pour écrire des tests unitaires et d'intégration
@@ -132,30 +132,50 @@
         </dependency>
         -->
 
-        <!-- Jackson pour JSON -->
+        <!-- ===================== Jackson pour la gestion du JSON ===================== -->
+
+        <!--
+            jackson-databind :
+            Permet de convertir automatiquement les objets Java en JSON et inversement.
+            Indispensable pour les API REST avec Spring Boot.
+        -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
         </dependency>
+
+        <!--
+            jackson-datatype-jsr310 :
+            Ajoute le support des nouveaux types de dates et heures de Java 8+ (LocalDate, LocalDateTime, etc.)
+            avec Jackson, pour une sérialisation/désérialisation correcte.
+        -->
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-jsr310</artifactId>
         </dependency>
 
-        <!-- SPRING SECURITY-->
+        <!-- ===================== Spring Security ===================== -->
+
+        <!--
+            spring-boot-starter-security :
+            Ajoute la sécurité à l'application Spring Boot (authentification, autorisation, protection des routes, etc.)
+        -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
+        <!--
+            spring-security-test :
+            Outils et utilitaires pour écrire des tests unitaires et d'intégration
+            concernant la sécurité (MockMvc, annotations de test, etc.).
+            Cette dépendance n'est utilisée que pour les tests (scope test).
+        -->
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
         </dependency>
-
-
     </dependencies>
-
     <!--
         Configuration du build Maven
         - Liste des plugins utilisés pour compiler, tester, empaqueter et exécuter le projet

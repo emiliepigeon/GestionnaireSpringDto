@@ -524,3 +524,22 @@ http://localhost:8080/api/sequences/ -> 404 NOT FOUND
 
 
 Besoin d'investiguer pour comprendre le pourquoi ?????
+
+## 05/06/25 Suite
+
+Réponse trouvée pour les / et sans = 200 ou 404
+
+    @GetMapping({"", "/"})
+
+
+SecurityConfigAPI.java
+
+Explications complémentaires : classe SecurityConfigAPI 
+
+    L’annotation @Configuration indique à Spring que cette classe contient des beans de configuration pour la sécurité.
+
+    Le bean SecurityFilterChain est le cœur de la configuration de sécurité : il définit comment les requêtes HTTP sont sécurisées (ici, toutes nécessitent une authentification via HTTP Basic).
+
+    Le bean PasswordEncoder permet de hasher les mots de passe avec BCrypt, ce qui est recommandé pour la sécurité.
+
+    Le bean UserDetailsService crée un utilisateur en mémoire, pratique pour les phases de test ou de prototypage.

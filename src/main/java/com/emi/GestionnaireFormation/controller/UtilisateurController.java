@@ -45,7 +45,7 @@ public class UtilisateurController {
      *
      * @return une liste de UtilisateurDto
      */
-    @GetMapping("/")
+    @GetMapping({"", "/"})
     public List<UtilisateurDto> findAll() {
         return utilisateurRepository.findAll().stream()
             .map(UtilisateurMapper::toDto) // Utilisation du mapper
