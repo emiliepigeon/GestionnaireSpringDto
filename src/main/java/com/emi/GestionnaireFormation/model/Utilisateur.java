@@ -3,6 +3,7 @@ package com.emi.GestionnaireFormation.model;
 import java.util.HashSet;
 import java.util.Set;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -51,6 +52,13 @@ public class Utilisateur {
     private String adresseMail;
 
     /**
+     * MODIF: J’ajoute ici le champ password pour gérer l’authentification.
+     * Je débute : ce champ me permet de stocker le mot de passe de l’utilisateur.
+     */
+    @Column(nullable = false)
+    private String password; // <-- AJOUT pour JWT
+
+    /**
      * MODIF: Relation ManyToMany pour permettre plusieurs rôles par utilisateur.
      * Je débute : avant c'était ManyToOne, maintenant ManyToMany, donc un Set<Role>.
      */
@@ -81,6 +89,18 @@ public class Utilisateur {
 
     public String getAdresseMail() { return adresseMail; }
     public void setAdresseMail(String adresseMail) { this.adresseMail = adresseMail; }
+
+    /**
+     * Getter pour le mot de passe.
+     * Je débute : ce getter est utilisé pour vérifier le mot de passe lors du login.
+     */
+    public String getPassword() { return password; } // <-- AJOUT pour JWT
+
+    /**
+     * Setter pour le mot de passe.
+     * Je débute : ce setter me permet d’enregistrer ou de modifier le mot de passe.
+     */
+    public void setPassword(String password) { this.password = password; } // <-- AJOUT pour JWT
 
     /**
      * Retourne la liste des rôles de l'utilisateur.

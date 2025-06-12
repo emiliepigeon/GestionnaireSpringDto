@@ -543,3 +543,291 @@ Explications complémentaires : classe SecurityConfigAPI
     Le bean PasswordEncoder permet de hasher les mots de passe avec BCrypt, ce qui est recommandé pour la sécurité.
 
     Le bean UserDetailsService crée un utilisateur en mémoire, pratique pour les phases de test ou de prototypage.
+
+-------------------------------------------------------------------------------------------------
+
+## 12/06/25 Suite -> intégration de JWT pour l'authentification
+
+<!-- 📝 Journal de travail – Sécurité & Tests API
+🔒 1. Mise en place de la sécurité JWT
+
+    Nous avons corrigé la configuration de Spring Security pour protéger les endpoints avec un token JWT.
+
+    Correction du filtre JWT pour donner un rôle (ROLE_USER) à chaque utilisateur authentifié.
+
+🛠️ 2. Correction des erreurs 401 et 403
+
+    🚫 Avant : Tous les endpoints étaient en 401 (non authentifié), puis en 403 (non autorisé).
+
+    ✅ Après correction : Les utilisateurs avec un JWT valide peuvent accéder aux endpoints protégés.
+
+🗃️ 3. Vérification du code
+
+    Nous avons relu et corrigé :
+
+        Le filtre JwtAuthenticationFilter.java
+
+        La configuration SecurityConfigJwt.java
+
+        Le contrôleur d’authentification AuthController.java
+
+    Suppression des configs de sécurité inutiles.
+
+🧪 4. Tests avec Postman
+
+    📤 Login :
+
+        POST /auth/login avec un matricule et mot de passe existants.
+
+        Récupération du token JWT.
+
+    📥 Utilisation du token :
+
+        Ajout du header Authorization: Bearer <token> dans toutes les requêtes protégées.
+
+        Test des endpoints (GET, POST, PUT, DELETE) sur /api/utilisateurs/.
+
+🗨️ 5. Conseils et bonnes pratiques
+
+    Toujours commencer par le login pour obtenir un token.
+
+    Vérifier l’URL exacte et le mapping dans les contrôleurs.
+
+    Lire les messages d’erreur dans la console pour comprendre les problèmes. -->
+
+<!-- 🎯 Bilan
+
+    🔄 Maintenant, l’authentification et l’autorisation fonctionnent !
+
+    🌟 Je peux tester toute mon API en sécurité avec Postman. -->
+
+📝 Journal de travail – Sécurité & Tests API
+🔒 1. Mise en place de la sécurité JWT
+
+    Correction de la configuration Spring Security pour protéger les endpoints avec un token JWT.
+
+    Ajout d’un rôle (ROLE_USER) à chaque utilisateur authentifié dans le filtre JWT.
+
+🛠️ 2. Correction des erreurs 401 et 403
+
+    🚫 Avant : Tous les endpoints étaient en 401 (non authentifié), puis en 403 (non autorisé).
+
+    ✅ Après correction : Les utilisateurs avec un JWT valide devraient pouvoir accéder aux endpoints protégés.
+
+    ⚠️ Problème restant : Je suis toujours en 403 sur tous mes endpoints, même après toutes les corrections.
+
+🗃️ 3. Vérification du code
+
+    Relecture et correction de :
+
+        JwtAuthenticationFilter.java
+
+        SecurityConfigJwt.java
+
+        AuthController.java
+
+    Suppression des configurations de sécurité inutiles.
+
+🧪 4. Tests avec Postman
+
+    📤 Login : POST /auth/login avec un matricule et mot de passe existants → récupération du token JWT.
+
+    📥 Utilisation du token : Ajout du header Authorization: Bearer <token> pour toutes les requêtes protégées.
+
+    ❌ Résultat : Toujours 403 Forbidden sur tous les endpoints testés.
+
+🗨️ 5. Conseils et constats
+
+    Vérification de l’URL et du mapping dans les contrôleurs.
+
+    Lecture des messages d’erreur dans la console.
+
+    Le problème ne vient pas du pom.xml ni des DTO/mappers, mais sans doute d’un détail dans la configuration ou le mapping.
+
+🎯 Bilan
+
+    🔄 Beaucoup de corrections appliquées, mais le 403 Forbidden persiste sur tous les endpoints malgré un JWT valide.
+
+    🆘 Prochaine étape : Continuer à chercher la cause du blocage (vérifier le mapping réel, la config de sécurité, la console Spring, etc.).
+
+
+## Alors vu mon problème de 403 pour mes endpoints on va tout remettre à plat
+
+Voici mon analyse du projet en l'état actuel:
+---
+
+## Respect des bonnes pratiques
+
+**Points positifs :**
+- **Architecture claire en couches** : J’utilise bien la séparation entre mes entités (`model`), mes DTO, mes repositories, mes services, mes mappers et mes controllers. C’est la base d’une bonne architecture en Spring Boot.
+- **Sécurité** : J’ai intégré Spring Security avec un filtre JWT pour sécuriser mes endpoints, ce qui est une bonne pratique moderne.
+- **Utilisation des DTO** : Je n’expose pas directement mes entités JPA, mais j’utilise des DTO pour échanger avec le frontend, ce qui protège mes données et évite les fuites d’informations sensibles.
+- **Configuration propre** : Ma configuration de base de données est claire et adaptée à un environnement de développement avec MariaDB/MySQL.
+- **Gestion des dépendances** : Mon `pom.xml` est bien organisé, avec les dépendances nécessaires pour Spring Boot, JPA, Security, JWT, etc.
+- **Utilisation de Postman** : Je teste mes endpoints avec Postman, ce qui est une bonne pratique pour vérifier le fonctionnement de mon API.
+
+**Points à améliorer :**
+- **Clé secrète JWT** : Pour la production, je devrai utiliser une clé secrète plus complexe et ne pas la laisser en dur dans mon code.
+- **Gestion des mots de passe** : Mes mots de passe sont stockés en clair. Il est recommandé de les chiffrer (par exemple avec BCrypt) avant de les sauvegarder en base.
+- **Validation des données** : Je pourrais ajouter de la validation sur mes DTO (avec des annotations comme `@NotNull`, `@Email`, etc.) pour sécuriser les entrées utilisateur.
+- **Gestion des erreurs** : Pour l’instant, les erreurs sont retournées sous forme d’exception brute. Il est conseillé de gérer les erreurs avec des réponses plus claires pour le frontend (ex : codes HTTP, messages personnalisés).
+
+---
+
+## Architecture de mon projet
+
+Mon projet suit une architecture **3-tiers** classique, très utilisée en Spring Boot :
+
+| Couche                   | Rôle principal                                                                 |
+|--------------------------|-------------------------------------------------------------------------------|
+| **Présentation**         | Mes `controllers` (ex : `UtilisateurController`) reçoivent les requêtes HTTP. |
+| **Logique métier**       | Mes `services` (ex : `UtilisateurService`) contiennent la logique métier.     |
+| **Accès aux données**    | Mes `repositories` (ex : `UtilisateurRepository`) accèdent à la base de données.|
+
+Autres éléments :
+- **DTO et Mappers** : Mes DTO servent à transporter les données, mes Mappers à convertir entre entités et DTO.
+- **Sécurité** : Ma sécurité est gérée par un filtre JWT et une configuration Spring Security.
+- **Configuration** : Les propriétés de la base de données et de Spring Boot sont dans `application.properties`.
+
+### Schéma simplifié de mon architecture
+
+```
+[Frontend/Postman]
+        |
+     (HTTP)
+        |
+[Controller]  [DTO]  [Mapper]  [Service]  [Repository]  [Base de données]
+        |
+   [Sécurité JWT]
+```
+
+Je peux faire évoluer cette architecture plus tard (modularisation, microservices, etc.), mais pour un projet CRUD REST, c’est déjà très bien.
+
+---
+
+## Conclusion
+
+Mon projet respecte les bonnes pratiques de base pour une application Spring Boot moderne et structurée. 
+
+J’ai une séparation claire des responsabilités, j’utilise des outils adaptés et j’ai déjà intégré la sécurité. 
+
+Pour aller plus loin, je pense à la gestion des mots de passe, à la validation des entrées et à une meilleure gestion des erreurs, mais je suis sur la bonne voie !
+
+
+## Shéma hiérarchie du projet (actuelle)
+
+GestionnaireFormation/
+│
+├── pom.xml
+│     → Mon fichier de configuration Maven : il décrit les dépendances, la version de Java, les plugins, etc.
+│
+├── src/
+│   └── main/
+│       └── java/
+│           └── com/
+│               └── emi/
+│                   └── GestionnaireFormation/
+│                       │
+│                       ├── GestionnaireFormationApplication.java
+│                       │     → Le point d’entrée de mon application Spring Boot. C’est ici que je démarre mon appli.
+│                       │
+│                       ├── controller/
+│                       │     ├── UtilisateurController.java
+│                       │     │     → Je gère les endpoints REST pour les utilisateurs (CRUD, rôles...).
+│                       │     ├── RoleController.java
+│                       │     │     → Je gère les endpoints REST pour les rôles.
+│                       │     ├── FormationController.java
+│                       │     │     → Je gère les endpoints REST pour les formations.
+│                       │     ├── CentreController.java
+│                       │     │     → Je gère les endpoints REST pour les centres de formation.
+│                       │     ├── ModuleController.java
+│                       │     │     → Je gère les endpoints REST pour les modules de formation.
+│                       │     ├── SequenceController.java
+│                       │     │     → Je gère les endpoints REST pour les séquences pédagogiques.
+│                       │     └── AuthController.java
+│                       │           → Je gère l’authentification (login) et la génération du token JWT.
+│                       │
+│                       ├── dto/
+│                       │     ├── UtilisateurDto.java
+│                       │     │     → Je transporte les infos d’un utilisateur sans exposer l’entité JPA.
+│                       │     ├── RoleDto.java
+│                       │     │     → Je transporte le libellé d’un rôle.
+│                       │     ├── FormationDto.java
+│                       │     │     → Je transporte les infos d’une formation.
+│                       │     ├── CentreDto.java
+│                       │     │     → Je transporte les infos d’un centre de formation.
+│                       │     ├── ModuleDto.java
+│                       │     │     → Je transporte les infos d’un module de formation.
+│                       │     └── SequenceDto.java
+│                       │           → Je transporte les infos d’une séquence pédagogique.
+│                       │
+│                       ├── mapper/
+│                       │     ├── UtilisateurMapper.java
+│                       │     │     → Je convertis entre Utilisateur et UtilisateurDto.
+│                       │     ├── RoleMapper.java
+│                       │     │     → Je convertis entre Role et RoleDto.
+│                       │     ├── FormationMapper.java
+│                       │     │     → Je convertis entre Formation et FormationDto.
+│                       │     ├── CentreMapper.java
+│                       │     │     → Je convertis entre Centre et CentreDto.
+│                       │     ├── ModuleMapper.java
+│                       │     │     → Je convertis entre Module et ModuleDto.
+│                       │     └── SequenceMapper.java
+│                       │           → Je convertis entre Sequence et SequenceDto.
+│                       │
+│                       ├── model/
+│                       │     ├── Utilisateur.java
+│                       │     │     → Mon entité JPA pour les utilisateurs.
+│                       │     ├── Role.java
+│                       │     │     → Mon entité JPA pour les rôles.
+│                       │     ├── Formation.java
+│                       │     │     → Mon entité JPA pour les formations.
+│                       │     ├── Centre.java
+│                       │     │     → Mon entité JPA pour les centres de formation.
+│                       │     ├── Module.java
+│                       │     │     → Mon entité JPA pour les modules de formation.
+│                       │     └── Sequence.java
+│                       │           → Mon entité JPA pour les séquences pédagogiques.
+│                       │
+│                       ├── repository/
+│                       │     ├── UtilisateurRepository.java
+│                       │     │     → Je gère l’accès à la base de données pour les utilisateurs.
+│                       │     ├── RoleRepository.java
+│                       │     │     → Je gère l’accès à la base de données pour les rôles.
+│                       │     ├── FormationRepository.java
+│                       │     │     → Je gère l’accès à la base de données pour les formations.
+│                       │     ├── CentreRepository.java
+│                       │     │     → Je gère l’accès à la base de données pour les centres.
+│                       │     ├── ModuleRepository.java
+│                       │     │     → Je gère l’accès à la base de données pour les modules.
+│                       │     └── SequenceRepository.java
+│                       │           → Je gère l’accès à la base de données pour les séquences.
+│                       │
+│                       ├── service/
+│                       │     ├── UtilisateurService.java
+│                       │     │     → Je contiens la logique métier pour les utilisateurs.
+│                       │     ├── RoleService.java
+│                       │     │     → Je contiens la logique métier pour les rôles.
+│                       │     ├── FormationService.java
+│                       │     │     → Je contiens la logique métier pour les formations.
+│                       │     ├── CentreService.java
+│                       │     │     → Je contiens la logique métier pour les centres.
+│                       │     ├── ModuleService.java
+│                       │     │     → Je contiens la logique métier pour les modules.
+│                       │     ├── SequenceService.java
+│                       │     │     → Je contiens la logique métier pour les séquences.
+│                       │     └── JwtUtil.java
+│                       │           → Je gère la création et la validation des tokens JWT.
+│                       │
+│                       └── security/
+│                             ├── SecurityConfigJwt.java
+│                             │     → Je configure la sécurité de mon application (routes protégées, filtre JWT...).
+│                             └── JwtAuthenticationFilter.java
+│                                   → Je vérifie les tokens JWT sur chaque requête et j’authentifie l’utilisateur.
+│
+└── src/
+    └── main/
+        └── resources/
+            ├── application.properties
+            │     → Je contiens la configuration de mon application (base de données, port, etc.).
+            └── ... (autres fichiers de configuration éventuels)

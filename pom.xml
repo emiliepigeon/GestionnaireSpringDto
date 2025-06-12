@@ -6,8 +6,8 @@
 -->
 
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <!-- Version du modèle Maven (toujours 4.0.0 pour les projets modernes) -->
     <modelVersion>4.0.0</modelVersion>
@@ -46,7 +46,7 @@
     <properties>
         <java.version>21</java.version>
     </properties>
-        <!-- ===================== LISTE DES DEPENDENCIES ===================== -->
+    <!-- ===================== LISTE DES DEPENDENCIES ===================== -->
     <!--
         Liste des dépendances utilisées dans le projet
         Chaque <dependency> ajoute une bibliothèque externe ou un module Spring Boot
@@ -174,6 +174,19 @@
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
+        </dependency>
+
+        <!-- ===================== Jwt ===================== -->
+        <!-- 
+            Dépendance pour utiliser les JSON Web Tokens (JWT) dans mon projet.
+            Elle me permet de générer et de vérifier des tokens pour sécuriser l'authentification.
+            Documentation : https://github.com/jwtk/jjwt
+        -->
+        <dependency>
+            <!-- Librairie Java pour manipuler les JWT (JSON Web Token) -->
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>0.9.1</version>
         </dependency>
     </dependencies>
     <!--
