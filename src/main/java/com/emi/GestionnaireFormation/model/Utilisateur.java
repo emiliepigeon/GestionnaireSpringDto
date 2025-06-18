@@ -24,44 +24,38 @@ import jakarta.persistence.Table;
 @Table(name = "utilisateur")
 public class Utilisateur {
 
-    /**
-     * Identifiant unique de l'utilisateur (clé primaire, auto-générée).
-     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    /**
-     * Matricule unique de l'utilisateur.
-     */
+    @Column(nullable = false, length = 7)
     private String matricule;
 
-    /**
-     * Nom de famille de l'utilisateur.
-     */
+    @Column(nullable = false)
     private String nom;
 
-    /**
-     * Prénom de l'utilisateur.
-     */
+    @Column(nullable = false)
     private String prenom;
 
-    /**
-     * Adresse mail de l'utilisateur.
-     */
+    @Column(name = "adresse_mail", nullable = false)
     private String adresseMail;
 
-    /**
-     * MODIF: J’ajoute ici le champ password pour gérer l’authentification.
-     * Je débute : ce champ me permet de stocker le mot de passe de l’utilisateur.
-     */
-    @Column(nullable = false)
-    private String password; // <-- AJOUT pour JWT
+    @Column(name = "adresse_postal", nullable = false)
+    private String adressePostal;
 
-    /**
-     * MODIF: Relation ManyToMany pour permettre plusieurs rôles par utilisateur.
-     * Je débute : avant c'était ManyToOne, maintenant ManyToMany, donc un Set<Role>.
-     */
+    @Column(name = "code_postal", nullable = false, length = 5)
+    private String codePostal;
+
+    @Column(nullable = false)
+    private String ville;
+
+    @Column(name = "mot_de_passe", nullable = false)
+    private String motDePasse;
+
+    @Column(nullable = false)
+    private Boolean statut;
+
+    // Relations ManyToMany avec Role (table utilisateur_role)
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
         name = "utilisateur_role",
@@ -70,10 +64,9 @@ public class Utilisateur {
     )
     private Set<Role> roles = new HashSet<>();
 
-    /**
-     * Constructeur vide obligatoire pour JPA/Spring.
-     */
     public Utilisateur() {}
+
+    // --- Getters et Setters ---
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -90,27 +83,30 @@ public class Utilisateur {
     public String getAdresseMail() { return adresseMail; }
     public void setAdresseMail(String adresseMail) { this.adresseMail = adresseMail; }
 
+    public String getAdressePostal() { return adressePostal; }
+    public void setAdressePostal(String adressePostal) { this.adressePostal = adressePostal; }
+
+    public String getCodePostal() { return codePostal; }
+    public void setCodePostal(String codePostal) { this.codePostal = codePostal; }
+
+    public String getVille() { return ville; }
+    public void setVille(String ville) { this.ville = ville; }
+
     /**
      * Getter pour le mot de passe.
-     * Je débute : ce getter est utilisé pour vérifier le mot de passe lors du login.
+     * @return le mot de passe de l'utilisateur
      */
-    public String getPassword() { return password; } // <-- AJOUT pour JWT
+    public String getMotDePasse() { return motDePasse; }
 
     /**
      * Setter pour le mot de passe.
-     * Je débute : ce setter me permet d’enregistrer ou de modifier le mot de passe.
+     * @param motDePasse le mot de passe à enregistrer
      */
-    public void setPassword(String password) { this.password = password; } // <-- AJOUT pour JWT
+    public void setMotDePasse(String motDePasse) { this.motDePasse = motDePasse; }
 
-    /**
-     * Retourne la liste des rôles de l'utilisateur.
-     * @return les rôles
-     */
+    public Boolean getStatut() { return statut; }
+    public void setStatut(Boolean statut) { this.statut = statut; }
+
     public Set<Role> getRoles() { return roles; }
-
-    /**
-     * Définit la liste des rôles de l'utilisateur.
-     * @param roles les rôles à associer
-     */
     public void setRoles(Set<Role> roles) { this.roles = roles; }
 }

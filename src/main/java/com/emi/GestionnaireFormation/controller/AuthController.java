@@ -12,7 +12,7 @@ import com.emi.GestionnaireFormation.service.JwtUtil;
 
 /**
  * Contrôleur REST pour l'authentification (login).
- * Je débute : Ce contrôleur me permet de connecter un utilisateur et de recevoir un token JWT.
+ * Permet de connecter un utilisateur et de recevoir un token JWT.
  */
 @RestController
 @RequestMapping("/auth")
@@ -29,7 +29,7 @@ public class AuthController {
     @PostMapping("/login")
     public String login(@RequestBody LoginRequest request) {
         Utilisateur utilisateur = utilisateurRepository.findByMatricule(request.getMatricule());
-        if (utilisateur != null && utilisateur.getPassword().equals(request.getPassword())) {
+        if (utilisateur != null && utilisateur.getMotDePasse().equals(request.getPassword())) {
             return JwtUtil.generateToken(utilisateur.getMatricule());
         }
         throw new RuntimeException("Matricule ou mot de passe incorrect");
@@ -40,7 +40,7 @@ public class AuthController {
      */
     public static class LoginRequest {
         private String matricule;
-        private String password;
+        private String password; // <-- ce champ est "password" dans le JSON
 
         public String getMatricule() { return matricule; }
         public void setMatricule(String matricule) { this.matricule = matricule; }
